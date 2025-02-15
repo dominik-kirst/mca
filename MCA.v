@@ -128,56 +128,66 @@ Add Parametric Relation M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) :
 
 Notation "x <= y" := (hrel x y).
 
-Definition ihinf M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) :
-  forall I, (I -> Omega) -> Omega :=  
-  fun I F => hinf (fun o => exists i, o = F i).
+Section MMod.
 
-Lemma ax_refl' M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) x x' :
-  x = x' -> x <= x'.
-Proof.
-  intros <-. apply ax_refl.
-Qed.
+  Context {M : Monad}.
+  Context {mas : MAS M}.
+  Context {mca : MCA mas}.
+  Context {mod : MMod mca }.
 
-Lemma ax_meet_comm M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) x y :
-  hmeet x y <= hmeet y x.
-Proof.
-  apply ax_meet. apply ax_meet2. apply ax_meet1.
-Qed.
+  Lemma ax_refl' x x' :
+    x = x' -> x <= x'.
+  Proof.
+    intros <-. apply ax_refl.
+  Qed.
 
-Lemma ax_inf' M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) P x :
-  P x -> hinf P <= x.
-Proof.
-  intros H. apply <- ax_inf; eauto. reflexivity.
-Qed.
+  Lemma ax_meet_comm x y :
+    hmeet x y <= hmeet y x.
+  Proof.
+    apply ax_meet. apply ax_meet2. apply ax_meet1.
+  Qed.
 
-Lemma imp_right M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) x y y' :
-  y <= y' -> himp x y <= himp x y'.
-Proof.
-  intros H. apply ax_imp. rewrite <- H. apply ax_imp. reflexivity.
-Qed.
+  Lemma ax_inf' P x :
+    P x -> hinf P <= x.
+  Proof.
+    intros H. apply <- ax_inf; eauto. reflexivity.
+  Qed.
 
-Lemma ax_mono_ext' M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) (phi psi : code -> Omega) m x :
-  (forall c, hrel (hmeet x (phi c)) (psi c)) -> hrel (hmeet x (after m phi)) (after m psi).
-Proof.
-  intros H. apply ax_imp. rewrite <- ax_mono.
-  apply ax_inf. intros y [c ->]. apply ax_imp, H.
-Qed.
+  Lemma imp_right x y y' :
+    y <= y' -> himp x y <= himp x y'.
+  Proof.
+    intros H. apply ax_imp. rewrite <- H. apply ax_imp. reflexivity.
+  Qed.
 
-Lemma ax_mono_ext M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) (phi psi : code -> Omega) m :
-  (forall c, hrel (phi c) (psi c)) -> hrel (after m phi) (after m psi).
-Proof.
-  intros H.
-Admitted.
+  Lemma ax_mono_ext' (phi psi : code -> Omega) m x :
+    (forall c, hmeet x (phi c) <= psi c) -> hmeet x (after m phi) <= after m psi.
+  Proof.
+    intros H. apply ax_imp. rewrite <- ax_mono.
+    apply ax_inf. intros y [c ->]. apply ax_imp, H.
+  Qed.
 
-Lemma ax_mono_meet M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) (phi : code -> Omega) m x :
-  hrel (hmeet x (after m phi)) (after m (fun a => hmeet x (phi a))).
-Proof.
-Admitted.
+  Lemma ax_mono_ext (phi psi : code -> Omega) m :
+    (forall c, phi c <= psi c) -> after m phi <= after m psi.
+  Proof.
+    intros H. erewrite <- (@ax_mono_ext' phi psi m htop).
+    - apply ax_meet; try reflexivity. apply ax_top.
+    - intros c. rewrite ax_meet2. apply H.
+  Qed.
 
-Lemma ax_mono_imp M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) (phi : code -> Omega) m x :
-  hrel (after m (fun a => himp x (phi a))) (himp x (after m phi)).
-Proof.
-Admitted.
+  Lemma ax_mono_meet (phi : code -> Omega) m x :
+    hmeet x (after m phi) <= after m (fun a => hmeet x (phi a)).
+  Proof.
+    apply ax_mono_ext'. reflexivity.
+  Qed.
+
+  Lemma ax_mono_imp (phi : code -> Omega) m x :
+    after m (fun a => himp x (phi a)) <= himp x (after m phi).
+  Proof.
+    apply ax_imp. rewrite ax_meet_comm. apply ax_mono_ext'.
+    intros c. rewrite ax_meet_comm. apply ax_imp. reflexivity.
+  Qed.
+
+End MMod.
 
 
 
@@ -198,16 +208,25 @@ Notation p1 :=
 Notation p2 :=
   (lam 1 $1).
 
+Ltac simpl_mca :=
+  progress repeat (rewrite ?lam_S, ?lam_O; autorewrite with subs eval; rewrite ?lunit, ?runit).
+
 Theorem MCA_EF M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) : EF.
 Proof.
   unshelve econstructor.
+
+  (* base types *)
   - exact (code -> Omega).
   - exact code.
-  - exact (fun P e P' => forall c, P c <= after (mapp e c) P').
+
+  (* propositional operations *)
+  - exact (fun phi e psi => forall c, phi c <= after (mapp e c) psi).
   - exact (fun _ => htop).
-  - intros P P' e. exact (hmeet (after (mapp e p1) P) (after (mapp e p2) P')).
-  - intros P P' e. apply hinf. intros o.
-    exact (exists phi, P' phi /\ o = hinf (fun x => exists c, x = himp (P c) (after (mapp e c) phi))).
+  - intros phi psi e. exact (hmeet (after (mapp e p1) phi) (after (mapp e p2) psi)).
+  - intros phi P e. apply hinf. intros o.
+    exact (exists psi, P psi /\ o = hinf (fun x => exists c, x = himp (phi c) (after (mapp e c) psi))).
+  
+  (* evidences *)
   - exact (lam 0 $0).
   - intros f g. exact (lam 0 (eapp (cst g) (eapp (cst f) $0))).
   - exact (lam 0 $0).
@@ -216,13 +235,12 @@ Proof.
   - exact (lam 0 (eapp $0 (cst p2))).
   - intros e. exact (lam 1 (eapp (cst e) (eapp (eapp (cst (lam 2 (eapp (eapp $2 $0) $1))) $0) $1))).
   - intros e. exact (lam 0 (eapp (eapp (cst e) (eapp $0 (cst p1))) (eapp $0 (cst p2)))).
-  - cbn. intros phi c. rewrite lam_O. autorewrite with subs eval. apply ax_ret.
-  - cbn. intros phi1 phi2 phi3 e e' H1 H2 c.
-    rewrite !lam_O. autorewrite with subs eval.
-    rewrite !lunit. rewrite <- ax_bind, H1.
-    apply ax_mono_ext. apply H2.
-  - cbn. intros phi c. rewrite lam_O.
-    autorewrite with subs eval.
+
+  (* proofs *)
+  - cbn. intros phi c. simpl_mca. apply ax_ret.
+  - cbn. intros phi1 phi2 phi3 e e' H1 H2 c. simpl_mca.
+    rewrite <- ax_bind, H1. apply ax_mono_ext. apply H2.
+  - cbn. intros phi c. simpl_mca.
     rewrite <- ax_ret; eauto. apply ax_top.
   - cbn. intros phi psi psi' e e' H1 H2 c.
     assert (HC : phi c <= after (mapp e c) (fun c1 => after (mapp e' c) (fun c2 => hmeet (psi c1) (psi' c2)))).
@@ -233,55 +251,26 @@ Proof.
     { rewrite HC. apply ax_mono_ext. intros m. apply ax_mono_ext. intros m'. apply ax_meet1. }
     assert (HC2 : phi c <= after (mapp e c) (fun c1 => after (mapp e' c) (fun c2 => psi' c2))).
     { rewrite HC. apply ax_mono_ext. intros m. apply ax_mono_ext. intros m'. apply ax_meet2. }
-    rewrite !lam_S. autorewrite with subs eval. rewrite <- ax_ret.
-    rewrite !lam_O. autorewrite with subs eval.
-    rewrite !lunit, !assoc. apply ax_meet.
+    simpl_mca. rewrite <- ax_ret. simpl_mca. rewrite !assoc. apply ax_meet.
     + rewrite <- ax_bind. rewrite HC1. apply ax_mono_ext.
-      intros x. rewrite !lam_S. autorewrite with subs eval. rewrite lunit.
-      rewrite <- ax_bind. apply ax_mono_ext. intros m.
-      rewrite lam_O. autorewrite with subs eval. apply ax_ret.
+      intros x. simpl_mca. rewrite <- ax_bind. apply ax_mono_ext.
+      intros m. simpl_mca. apply ax_ret.
     + rewrite <- ax_bind. rewrite HC2. apply ax_mono_ext.
-      intros x. rewrite !lam_S. autorewrite with subs eval. rewrite lunit.
-      rewrite <- ax_bind. apply ax_mono_ext. intros m.
-      rewrite lam_O. autorewrite with subs eval. apply ax_ret.
-  - cbn. intros phi psi c.
-    rewrite lam_O. autorewrite with subs eval.
-    rewrite <- ax_bind, <- ax_ret, <- ax_bind, <- ax_ret.
-    apply ax_meet1.
-  - cbn. intros phi psi c.
-    rewrite lam_O. autorewrite with subs eval.
-    rewrite <- ax_bind, <- ax_ret, <- ax_bind, <- ax_ret.
-    apply ax_meet2.
-  - cbn. intros phi psi P c H c'.
-    rewrite lam_S. autorewrite with subs eval.
+      intros x. simpl_mca. rewrite <- ax_bind. apply ax_mono_ext.
+      intros m. simpl_mca. apply ax_ret.
+  - cbn. intros phi psi c. simpl_mca. apply ax_meet1.
+  - cbn. intros phi psi c. simpl_mca. apply ax_meet2.
+  - cbn. intros phi psi P c H c'. simpl_mca.
     rewrite <- ax_ret. apply ax_inf.
-    intros x (phi' & HP & ->). apply ax_inf.
-    intros y (m & ->).
-    rewrite lam_O. autorewrite with subs eval.
-    rewrite lunit. apply ax_imp. rewrite <- !ax_bind, <- ax_ret, <- ax_bind, <- ax_ret.
-    rewrite lam_S. autorewrite with subs eval.
-    rewrite <- ax_ret. rewrite lunit.
-    rewrite lam_S. autorewrite with subs eval.
-    rewrite <- ax_ret.
-    rewrite <- H; trivial.
-    rewrite !lam_O. autorewrite with subs eval. apply ax_meet.
-    + rewrite <- !ax_bind, <- ax_ret, lunit.
-      rewrite lam_S. autorewrite with subs eval.
-      rewrite <- ax_ret, lunit.
-      rewrite lam_O. autorewrite with subs eval.
-      rewrite <- ax_ret. apply ax_meet1.
-    + rewrite <- !ax_bind, <- ax_ret, lunit.
-      rewrite lam_S. autorewrite with subs eval.
-      rewrite <- ax_ret, lunit.
-      rewrite lam_O. autorewrite with subs eval.
-      rewrite <- ax_ret. apply ax_meet2.
+    intros x (phi' & HP & ->). apply ax_inf. intros y (m & ->).
+    simpl_mca. apply ax_imp. rewrite <- H; trivial. simpl_mca. apply ax_meet.
+    + rewrite <- ax_ret. apply ax_meet1.
+    + rewrite <- ax_ret. apply ax_meet2.
   - cbn. intros phi phi' P e psi H HP c.
-    rewrite lam_O. autorewrite with subs eval. cbn.
-    rewrite !lunit. rewrite <- !ax_bind. cbn.
+    simpl_mca. rewrite <- !ax_bind. cbn.
     rewrite ax_meet_comm, ax_imp, <- ax_mono.
     apply ax_inf. intros m [c1 ->].
-    rewrite <- ax_imp, ax_meet_comm, ax_imp.
-    rewrite <- ax_mono_imp. rewrite H.
+    rewrite <- ax_imp, ax_meet_comm, ax_imp, <- ax_mono_imp, H.
     erewrite ax_mono_ext.
     2: { intros c2. apply ax_inf'. exists psi. split; trivial. reflexivity. }
     erewrite ax_mono_ext.
