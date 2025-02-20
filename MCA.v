@@ -280,3 +280,197 @@ Proof.
 Qed.
 
 Print Assumptions MCA_EF.
+
+
+
+(* Axioms *)
+
+Axiom PE : forall (P P' : Prop), P <-> P' -> P = P'.
+
+Axiom FE : forall X Y (f g : X -> Y), (forall x, f x = g x) -> f = g.
+
+Lemma PI (P : Prop) (H H' : P) :
+  H = H'.
+Proof.
+  assert (P = True) as ->.
+  - apply PE. tauto.
+  - destruct H, H'. reflexivity.
+Qed.
+
+Lemma CE X (P P' : X -> Prop) :
+  (forall x, P x <-> P' x) -> P = P'.
+Proof.
+  intros H. apply FE. intros x. apply PE. apply H.
+Qed.
+
+
+
+(* PCA *)
+
+Definition subsingleton A :=
+  { P : A -> Prop | forall x y, P x -> P y -> x = y }.
+
+Lemma subsingleton_eq A (P Q : subsingleton A) :
+  (forall x, proj1_sig P x <-> proj1_sig Q x) -> P = Q.
+Proof.
+  intros H. destruct P as [P HP], Q as [Q HQ]; cbn in H.
+  assert (HPQ : P = Q) by now apply CE.
+  destruct HPQ. f_equal. apply PI.
+Qed.
+
+Definition partiality_monad : Monad.
+Proof.
+  unshelve eapply (Build_Monad (M := subsingleton)).
+  - intros A x. exists (eq x). intros y y' ->. tauto.
+  - intros A B [P HP] F. exists (fun b => exists a, P a /\ proj1_sig (F a) b).
+    intros x y [a [H1 H2]] [a' [H3 H4]]. apply (HP a a') in H1 as <-; trivial.
+    destruct (F a) as [Q HQ]. cbn in *. now apply HQ.
+  - intros A [P HP]. cbn. apply subsingleton_eq. cbn.
+    intros x. split; eauto. intros [y [H ->]]. assumption.
+  - intros A B f x. apply subsingleton_eq. cbn.
+    intros y. split; eauto. intros [z [-> H]]. assumption.
+  - intros A B C f g [P HP]. apply subsingleton_eq. cbn. intros c. split.
+    + intros (b & (a & H1 & H2) & H3). exists a. split; trivial.
+      destruct (f a) as [Q HQ]. cbn in *. now exists b.
+    + intros (a & H1 & H2). destruct (f a) as [Q HQ] eqn: He. cbn in H2.
+      destruct H2 as (b & H3 & H4). exists b. split; trivial.
+      exists a. rewrite He. cbn. split; trivial.
+Defined.
+
+Definition PCA := @MCA partiality_monad.
+
+
+
+(* RCA *)
+
+Definition powerset A :=
+  A -> Prop.
+
+Lemma powerset_eq A (P Q : powerset A) :
+  (forall x, P x <-> Q x) -> P = Q.
+Proof.
+  apply CE.
+Qed.
+
+Definition powerset_monad : Monad.
+Proof.
+  unshelve eapply (Build_Monad (M := powerset)).
+  - intros A x. exact (eq x).
+  - intros A B P F. exact (fun b => exists a, P a /\ F a b).
+  - cbn. intros A m. apply powerset_eq. intros x.
+    split; eauto. intros [a [H ->]]. apply H.
+  - cbn. intros A B F x. apply powerset_eq. intros y.
+    split; eauto. intros [a [-> H]]. apply H.
+  - cbn. intros A B C F G m. apply powerset_eq. intros x. split.
+    + intros (b & (a & H1 & H2) & H3). exists a. split; trivial. now exists b.
+    + intros (a & H1 & (b & H3 & H4)). exists b. split; trivial. now exists a.
+Defined.
+
+Definition RCA := @MCA powerset_monad.
+
+
+
+(* SCA *)
+
+Section SCA.
+
+Variable Sig : Type.
+
+Definition state A :=
+  Sig -> powerset (prod Sig A).
+
+Lemma state_eq A (m m' : state A) :
+  (forall sig p, m sig p <-> m' sig p) -> m = m'.
+Proof.
+  intros H. apply FE. intros sig. apply CE. apply H.
+Qed.
+
+Definition state_monad : Monad.
+Proof.
+  unshelve eapply (Build_Monad (M := state)).
+  - intros A x. exact (fun sig => eq (sig, x)).
+  - intros A B m f. exact (fun sig p => exists sig' x, m sig (sig', x) /\ f x sig' p).
+  - cbn. intros A m. apply state_eq. intros sig [sig' x']. split; eauto.
+    intros [rho [x [H [=]]]]; subst. apply H.
+  - cbn. intros A B f x. apply state_eq. intros sig [sig' x']. split; eauto.
+    intros [rho [y [[=] H']]]; subst. apply H'.
+  - cbn. intros A B C f g m. apply state_eq. intros sig [sig' z]. split.
+    + intros (rho & y & (rho' & x & H1 & H2) & H3). firstorder eauto.
+    + intros (rho & x & H1 & (rho' & y & H3 & H4)). firstorder eauto.
+Defined.
+
+Definition SCA := @MCA state_monad.
+
+End SCA.
+
+
+
+(* CPS *)
+
+Section CPS.
+
+Variable Con : Type.
+
+Definition con A :=
+  (A -> Con) -> Con.
+
+Lemma con_eq A (m m' : con A) :
+  (forall c, m c = m' c) -> m = m'.
+Proof.
+  apply FE.
+Qed.
+
+Definition continuation_monad : Monad.
+Proof.
+unshelve eapply (Build_Monad (M := con)).
+- intros A x. exact (fun k => k x).
+- intros A B m f. exact (fun c => m (fun a => f a c)).
+- cbn. intros A m. apply con_eq. reflexivity.
+- cbn. intros A B f x. apply con_eq. reflexivity.
+- cbn. intros A B C f g m. apply con_eq. reflexivity.
+Defined.
+
+Definition CPS := @MCA continuation_monad.
+
+End CPS.
+
+
+
+(* ParCA *)
+
+Section ParCA.
+
+Variable Par : Type.
+
+Definition par A :=
+  Par -> subsingleton A.
+
+Lemma par_eq A (m m' : par A) :
+  (forall p x, proj1_sig (m p) x <-> proj1_sig (m' p) x) -> m = m'.
+Proof.
+  intros H. apply FE. intros p. apply subsingleton_eq. apply H.
+Qed.
+
+Definition parametric_monad : Monad.
+Proof.
+unshelve eapply (Build_Monad (M := par)).
+- intros A x p. exists (eq x). intros y y' ->. tauto.
+- intros A B m f p. exists (fun b => exists a, proj1_sig (m p) a /\ proj1_sig ((f a) p) b).
+  intros x y [a [H1 H2]] [a' [H3 H4]].
+  destruct (m p) as [P HP]. cbn in *. apply (HP a a') in H1 as <-; trivial.
+  destruct (f a p) as [Q HQ]. cbn in *. now apply HQ.
+- intros A m. cbn. apply par_eq. cbn.
+  intros x. split; eauto. intros [y [H ->]]. assumption.
+- intros A B f x. apply par_eq. cbn.
+  intros y. split; eauto. intros [z [-> H]]. assumption.
+- intros A B C f g m. apply par_eq. cbn. intros c. split.
+  + intros (b & (a & H1 & H2) & H3). exists a. split; trivial.
+    destruct (f a) as [Q HQ]. cbn in *. now exists b.
+  + intros (a & H1 & H2). destruct (f a) as [Q HQ] eqn: He. cbn in H2.
+    destruct H2 as (b & H3 & H4). exists b. split; trivial.
+    exists a. rewrite He. cbn. split; trivial.
+Defined.
+
+Definition ParCA := @MCA parametric_monad.
+
+End ParCA.
