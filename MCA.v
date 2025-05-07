@@ -296,6 +296,51 @@ End MMod.
 
 
 
+(* Separators *)
+
+Section Sep.
+
+  Context {M : Monad}.
+  Context {mas : MAS M}.
+  Context {mca : MCA mas}.
+  Context {mod : MMod mca }.
+
+  Variable sep : code -> Prop.
+
+  Fixpoint subexp n (e : exp n) :=
+    match e with
+    | var x => True
+    | cst c => sep c
+    | eapp e e' => subexp e /\ subexp e'
+    end.
+
+  Definition ccomplete :=
+    forall n (e : exp (S n)), subexp e -> sep (lam n e).
+
+  Definition progress :=
+    forall c c', sep c -> sep c' -> after (mapp c c') (fun _ => hbot) <= hbot.
+
+End Sep.
+
+Class subcode M (mas : MAS M) (Sep : code -> Prop) :=
+  {
+    elem : code;
+    elem_proof : Sep elem;
+  }.
+
+Coercion elem : subcode >-> code.
+
+Class separator (M : Monad) (mas : MAS M) (mca : MCA mas) (mod : MMod mca) : Type :=
+  {
+    subset : code -> Prop;
+    Sep1 : ccomplete subset;
+    Sep2 : progress subset;
+  }.
+
+Coercion subset : separator >-> Funclass.
+
+
+
 (* Induced EF *)
 
 Notation "$0" :=
@@ -316,13 +361,13 @@ Notation p2 :=
 Ltac simpl_mca :=
   progress repeat (rewrite ?lam_S, ?lam_O; autorewrite with subs eval; rewrite ?lunit, ?runit).
 
-Instance MCA_EF M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) : EF.
+Instance MCA_EF M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) (sep : separator mod) : EF.
 Proof.
   unshelve econstructor.
 
   (* base types *)
   - exact (code -> Omega).
-  - exact code.
+  - exact (subcode sep).
 
   (* propositional operations *)
   - exact (fun phi e psi => forall c, phi c <= after (mapp e c) psi).
@@ -333,15 +378,18 @@ Proof.
     exact (exists psi, P psi /\ o = hinf (fun x => exists c, x = himp (phi c) (after (mapp e c) psi))).
   
   (* evidences *)
-  - exact (lam 0 $0).
-  - intros f g. exact (lam 0 (eapp (cst g) (eapp (cst f) $0))).
-  - exact (lam 0 $0).
-  - exact (lam 0 $0).
-  - intros e e'. exact (lam 1 (eapp (eapp $1 (eapp (cst e) $0)) (eapp (cst e') $0))).
-  - exact (lam 0 (eapp $0 (cst p1))).
-  - exact (lam 0 (eapp $0 (cst p2))).
-  - intros e. exact (lam 1 (eapp (cst e) (eapp (eapp (cst (lam 2 (eapp (eapp $2 $0) $1))) $0) $1))).
-  - intros e. exact (lam 0 (eapp (eapp (cst e) (eapp $0 (cst p1))) (eapp $0 (cst p2)))).
+  - exists (lam 0 $0). apply Sep1. cbn. tauto.
+  - intros f g. exists (lam 0 (eapp (cst g) (eapp (cst f) $0))). apply Sep1. cbn. intuition.
+  - exists (lam 0 $0). apply Sep1. cbn. tauto.
+  - exists (lam 0 $0). apply Sep1. cbn. tauto.
+  - intros e e'. exists (lam 1 (eapp (eapp $1 (eapp (cst e) $0)) (eapp (cst e') $0))).
+    apply Sep1. cbn. intuition.
+  - exists (lam 0 (eapp $0 (cst p1))). apply Sep1. cbn. intuition. apply Sep1. cbn. tauto.
+  - exists (lam 0 (eapp $0 (cst p2))). apply Sep1. cbn. intuition. apply Sep1. cbn. tauto.
+  - intros e. exists (lam 1 (eapp (cst e) (eapp (eapp (cst (lam 2 (eapp (eapp $2 $0) $1))) $0) $1))).
+    apply Sep1. cbn. intuition. apply Sep1. cbn. tauto.
+  - intros e. exists (lam 0 (eapp (eapp (cst e) (eapp $0 (cst p1))) (eapp $0 (cst p2)))).
+    apply Sep1. cbn. intuition; apply Sep1; cbn; tauto.
 
   (* proofs *)
   - cbn. intros phi c. simpl_mca. apply ax_ret.
@@ -390,13 +438,12 @@ Defined.
 
 Print Assumptions MCA_EF.
 
-Lemma agreement M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) :
-  (forall c c', after (mapp c c') (fun _ => hbot) <= hbot)
-    -> (htop <= hbot) <-> exists e, erel top e bot.
+Lemma agreement M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) (sep : separator mod) :
+  (htop <= hbot) <-> exists e, erel top e bot.
 Proof.
-  intros HP. split; intros H.
+  split; intros H.
   - exists eid. cbn. intros c. simpl_mca. rewrite <- ax_ret. apply H.
-  - destruct H as [e H]. cbn in H. rewrite (H e). apply HP.
+  - destruct H as [e H]. cbn in H. rewrite (H e). apply Sep2; intuition.
 Qed.
 
 
