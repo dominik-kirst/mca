@@ -69,12 +69,14 @@ Class EF : Type :=
   erel : prop -> evid -> prop -> Prop;
 
   top : prop;
+  bot : prop;
   conj : prop -> prop -> prop;
   uimp : prop -> (prop -> Prop) -> prop;
 
   eid : evid;
   eseq : evid -> evid -> evid;
   etop : evid;
+  ebot : evid;
   epair : evid -> evid -> evid;
   efst : evid;
   esnd : evid;
@@ -84,6 +86,7 @@ Class EF : Type :=
   ef_refl phi : erel phi eid phi;
   ef_trans phi1 phi2 phi3 e e' : erel phi1 e phi2 -> erel phi2 e' phi3 -> erel phi1 (eseq e e') phi3;
   ef_top phi : erel phi etop top;
+  ef_bot phi : erel bot ebot phi;
   ef_pair phi psi psi' e e' : erel phi e psi -> erel phi e' psi' -> erel phi (epair e e') (conj psi psi');
   ef_fst phi psi : erel (conj phi psi) efst phi;
   ef_snd phi psi : erel (conj phi psi) esnd psi;
@@ -100,6 +103,7 @@ Class MMod (M : Monad) (mas : MAS M) (mca : MCA mas) : Type :=
   Omega : Type;
   hrel : Omega -> Omega -> Prop;
   htop : Omega;
+  hbot : Omega;
   hmeet : Omega -> Omega -> Omega;
   himp : Omega -> Omega -> Omega;
   hinf : (Omega -> Prop) -> Omega;
@@ -109,6 +113,7 @@ Class MMod (M : Monad) (mas : MAS M) (mca : MCA mas) : Type :=
   ax_refl x : hrel x x;
   ax_trans x y z : hrel x y -> hrel y z -> hrel x z;
   ax_top x : hrel x htop;
+  ax_bot x : hrel hbot x;
   ax_meet1 x y : hrel (hmeet x y) x;
   ax_meet2 x y : hrel (hmeet x y) y;
   ax_meet x y z : hrel z x -> hrel z y -> hrel z (hmeet x y);
@@ -211,7 +216,7 @@ Notation p2 :=
 Ltac simpl_mca :=
   progress repeat (rewrite ?lam_S, ?lam_O; autorewrite with subs eval; rewrite ?lunit, ?runit).
 
-Theorem MCA_EF M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) : EF.
+Instance MCA_EF M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) : EF.
 Proof.
   unshelve econstructor.
 
@@ -222,6 +227,7 @@ Proof.
   (* propositional operations *)
   - exact (fun phi e psi => forall c, phi c <= after (mapp e c) psi).
   - exact (fun _ => htop).
+  - exact (fun _ => hbot).
   - intros phi psi e. exact (hmeet (after (mapp e p1) phi) (after (mapp e p2) psi)).
   - intros phi P e. apply hinf. intros o.
     exact (exists psi, P psi /\ o = hinf (fun x => exists c, x = himp (phi c) (after (mapp e c) psi))).
@@ -229,6 +235,7 @@ Proof.
   (* evidences *)
   - exact (lam 0 $0).
   - intros f g. exact (lam 0 (eapp (cst g) (eapp (cst f) $0))).
+  - exact (lam 0 $0).
   - exact (lam 0 $0).
   - intros e e'. exact (lam 1 (eapp (eapp $1 (eapp (cst e) $0)) (eapp (cst e') $0))).
   - exact (lam 0 (eapp $0 (cst p1))).
@@ -242,6 +249,8 @@ Proof.
     rewrite <- ax_bind, H1. apply ax_mono_ext. apply H2.
   - cbn. intros phi c. simpl_mca.
     rewrite <- ax_ret; eauto. apply ax_top.
+  - cbn. intros phi c. simpl_mca.
+    rewrite <- ax_ret; eauto. apply ax_bot.
   - cbn. intros phi psi psi' e e' H1 H2 c.
     assert (HC : phi c <= after (mapp e c) (fun c1 => after (mapp e' c) (fun c2 => hmeet (psi c1) (psi' c2)))).
     { rewrite <- ax_mono_ext. rewrite <- ax_mono_meet.
@@ -277,9 +286,18 @@ Proof.
     2: { intros c2. apply (ax_mono _ _ (mapp c p2)). }
     apply ax_mono_ext.
     intros c2. apply imp_right. apply ax_bind.
-Qed.
+Defined.
 
 Print Assumptions MCA_EF.
+
+Lemma agreement M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) :
+  (forall c c', after (mapp c c') (fun _ => hbot) <= hbot)
+    -> (htop <= hbot) <-> exists e, erel top e bot.
+Proof.
+  intros HP. split; intros H.
+  - exists eid. cbn. intros c. simpl_mca. rewrite <- ax_ret. apply H.
+  - destruct H as [e H]. cbn in H. rewrite (H e). apply HP.
+Qed.
 
 
 
