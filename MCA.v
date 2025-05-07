@@ -139,7 +139,7 @@ Section SK.
   Fixpoint size {n} (e : exp n) : nat :=
     match e with
     | var x => proj1_sig (to_nat x)
-    | cst x => 0
+    | cst x => 42
     | eapp e e' => 1 + (size e) + size e'
     end.
 
@@ -156,7 +156,7 @@ Section SK.
       Sncode2 n (abs e1) (abs e2).
   Proof.
     all: try lia.
-    - exact 42.
+    - exact 82.
     - cbn. destruct (to_nat x) as [n Hn]. cbn. lia.
   Qed.
       
