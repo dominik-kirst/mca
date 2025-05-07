@@ -59,6 +59,106 @@ Class MCA (M : Monad) (mas : MAS M) :=
 Arguments lam {_ _ _} _ _.
 
 
+(* SK Definition *)
+
+Section SK.
+
+  Context {M : Monad}.
+  Context {mas : MAS M}.
+  
+  Context {Scode : code}.
+  Context {Scode1 : code -> code}.
+  Context {Scode2 : code -> code -> code}.
+  Context {Kcode : code}.
+  Context {Kcode1 : code -> code}.
+
+  Context {appS : forall a0,
+    mapp Scode a0
+    = ret (Scode1 a0)}.
+
+  Context {appS1 : forall a0 a1,
+    mapp (Scode1 a0) a1
+    = ret (Scode2 a0 a1)}.
+  
+  Context {appS2 : forall a0 a1 b,
+    mapp (Scode2 a0 a1) b
+    = bind (mapp a0 b) (fun f =>
+      bind (mapp a1 b) (fun r =>
+      mapp f r
+    ))
+    }.
+  
+  Context {appK : forall a,
+    mapp Kcode a = ret (Kcode1 a)}.
+  
+  Context {appK1 : forall a b,
+    mapp (Scode1 a) b = ret a}.
+
+  Definition Icode :=
+    Scode2 Kcode Kcode.
+  
+  Definition Bcode1 :=
+    fun a0 => Scode1 (Kcode1 a0).
+  
+  Definition Bcode2 :=
+    fun a0 a1 => Scode2 (Kcode1 a0) a1.
+  
+  (* Goldberg's n-ary K *)
+
+  Fixpoint Kncode (n : nat) : code :=
+    match n with
+    | O => Icode
+    | S O => Kcode
+    | S n => Bcode2 Kcode (Kncode n)
+    end.
+
+  Fixpoint Kncode1 (n : nat) (c : code) : code :=
+    match n with
+    | O => c
+    | S O => Kcode1 c
+    | S n => Kcode1 (Kncode1 n c)
+    end.
+  
+  (* Goldberg's n-ary S *)
+
+  Fixpoint Sncode (n : nat) : code :=
+    match n with
+    | O => Icode
+    | S O => Scode
+    | S n => Bcode2 Scode (Bcode1 (Sncode n))
+    end.
+
+  Definition Sncode2 (n : nat) (c0 c1 : code) : code :=
+    match n with
+    | O => Scode2 c0 c1
+    | S n => Scode2 (Bcode2 (Sncode (S n)) c0) c1
+    end.
+  
+  (* Bracket Abstraction *)
+
+  Equations abs {n} (e : exp (S n)) : code :=
+    abs (var F1) :=
+      Kncode n;
+    abs (var (FS x)) :=
+      Kcode1 (abs (var x));
+    abs (cst c) :=
+      Kncode1 (S n) c;
+    abs (eapp e1 e2) :=
+      Sncode2 n (abs e1) (abs e2).
+
+  Equations abs n (e : exp (S n)) : code :=
+    abs n (var F1) :=
+      Kncode n;
+    abs (S n) (var (FS x)) :=
+      Kcode1 (abs n (var x));
+    abs n (cst c) :=
+      Kncode1 (S n) c;
+    abs n (eapp e1 e2) :=
+      Sncode2 n (abs n e1) (abs n e2).
+      
+
+End SK.
+
 
 (* Evidenced Frames *)
 
