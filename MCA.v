@@ -1,7 +1,7 @@
 Set Implicit Arguments.
 Unset Strict Implicit.
 
-Require Import Fin.
+Require Import Lia Fin.
 From Equations.Prop Require Import Equations.
 
 
@@ -136,27 +136,30 @@ Section SK.
   
   (* Bracket Abstraction *)
 
-  Equations abs {n} (e : exp (S n)) : code :=
+  Fixpoint size {n} (e : exp n) : nat :=
+    match e with
+    | var x => proj1_sig (to_nat x)
+    | cst x => 0
+    | eapp e e' => 1 + (size e) + size e'
+    end.
+
+  Equations? abs {n} (e : exp (S n)) : code by wf (size e) lt :=
     abs (var F1) :=
       Kncode n;
-    abs (var (FS x)) :=
-      Kcode1 (abs (var x));
+    abs (var (FS F1)) :=
+      Kcode1 (abs (var F1));
+    abs (var (FS (FS x))) :=
+      Kcode1 (abs (var (FS x)));
     abs (cst c) :=
       Kncode1 (S n) c;
     abs (eapp e1 e2) :=
       Sncode2 n (abs e1) (abs e2).
-
-  Equations abs n (e : exp (S n)) : code :=
-    abs n (var F1) :=
-      Kncode n;
-    abs (S n) (var (FS x)) :=
-      Kcode1 (abs n (var x));
-    abs n (cst c) :=
-      Kncode1 (S n) c;
-    abs n (eapp e1 e2) :=
-      Sncode2 n (abs n e1) (abs n e2).
+  Proof.
+    all: try lia.
+    - exact 42.
+    - cbn. destruct (to_nat x) as [n Hn]. cbn. lia.
+  Qed.
       
-
 End SK.
 
 
