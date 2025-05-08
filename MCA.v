@@ -158,9 +158,9 @@ Section SK.
       Sncode2 n (abs e1) (abs e2).
   Proof.
     all: try lia.
-    - exact 82.
+    - exact n.
     - cbn. destruct (to_nat x) as [n Hn]. cbn. lia.
-  Qed.
+  Defined.
 
   Ltac simpl_monad :=
     progress repeat (rewrite ?lunit, ?assoc).
@@ -188,8 +188,7 @@ Section SK.
           simpl_monad. rewrite appK.
           rewrite LKn1. reflexivity. }
       depelim x.
-        { simp abs. (* What is abs_obligation_1?!?! *)
-          (* ERROR!!!!!!!!! *)
+        { simp abs. cbn. unfold abs_obligation_1. now rewrite appK1. 
         }
         
     * simp subs. simp abs.
