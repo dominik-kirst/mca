@@ -4,6 +4,8 @@ Unset Strict Implicit.
 Require Import Lia Fin.
 From Equations.Prop Require Import Equations.
 
+(* Axiom!!! *)
+Require Import Coq.Logic.FunctionalExtensionality.
 
 
 (* Monads *)
@@ -92,7 +94,7 @@ Section SK.
     mapp Kcode a = ret (Kcode1 a)}.
   
   Context {appK1 : forall a b,
-    mapp (Scode1 a) b = ret a}.
+    mapp (Kcode1 a) b = ret a}.
 
   Definition Icode :=
     Scode2 Kcode Kcode.
@@ -159,7 +161,43 @@ Section SK.
     - exact 82.
     - cbn. destruct (to_nat x) as [n Hn]. cbn. lia.
   Qed.
-      
+
+  Ltac simpl_monad :=
+    progress repeat (rewrite ?lunit, ?assoc).
+
+  Instance skmca : MCA mas.
+  Proof. split with (lam := @abs).
+  - intros n e c. induction e as [ x | c' | e1 Ih1 e2 Ih2 ].
+    * admit. (* TODO: prove for variables *)
+    * simp subs. simp abs.
+    * simp subs. simp abs. induction n as [| n' Ihn ]; simpl.
+      + unfold Bcode2. rewrite appS2.
+        rewrite appS2.    simpl_monad.
+        rewrite appK1.    simpl_monad.
+        rewrite Ih1.      simpl_monad.
+        rewrite appS.     simpl_monad.
+        rewrite Ih2.      simpl_monad.
+        rewrite appS1.    reflexivity.
+      + unfold Bcode2. rewrite appS2.
+        rewrite appS2.    simpl_monad.
+        rewrite appK1.    simpl_monad.
+        rewrite Ih1.      simpl_monad.
+        rewrite appS2.    simpl_monad.
+        rewrite appK1.    simpl_monad.
+        unfold Bcode1.
+        rewrite appS1.    simpl_monad.
+        rewrite appS.     simpl_monad.
+        rewrite Ih2.      simpl_monad.
+        rewrite appS1. reflexivity.
+  - intros e c. induction e as [ x | c' | e1 Ih1 e2 Ih2 ].
+    * admit. (* TODO: prove for variables *)
+    * simp subs. simp abs.
+    * simp subs. simp abs.
+      unfold Sncode2. rewrite appS2.
+      rewrite Ih1. simp eval.
+      rewrite Ih2. reflexivity.
+  Admitted.
+
 End SK.
 
 
