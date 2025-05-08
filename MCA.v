@@ -239,7 +239,7 @@ Class EF : Type :=
 
 (* M-Modalities *)
 
-Class MMod (M : Monad) (mas : MAS M) (mca : MCA mas) : Type :=
+Class MMod (M : Monad) (mas : MAS M) : Type :=
 {
   Omega : Type;
   hrel : Omega -> Omega -> Prop;
@@ -266,7 +266,7 @@ Class MMod (M : Monad) (mas : MAS M) (mca : MCA mas) : Type :=
   ax_mono (phi psi : code -> Omega) m : hrel (hinf (fun x => exists c, x = himp (phi c) (psi c))) (himp (after m phi) (after m psi));
 }.
 
-Add Parametric Relation M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) :
+Add Parametric Relation M (mas : MAS M) (mod : MMod mas) :
   Omega hrel
   reflexivity proved by ax_refl
   transitivity proved by ax_trans
@@ -278,8 +278,7 @@ Section MMod.
 
   Context {M : Monad}.
   Context {mas : MAS M}.
-  Context {mca : MCA mas}.
-  Context {mod : MMod mca }.
+  Context {mod : MMod mas }.
 
   Lemma ax_refl' x x' :
     x = x' -> x <= x'.
@@ -344,7 +343,7 @@ Section Sep.
   Context {M : Monad}.
   Context {mas : MAS M}.
   Context {mca : MCA mas}.
-  Context {mod : MMod mca }.
+  Context {mod : MMod mas }.
 
   Variable sep : code -> Prop.
 
@@ -371,7 +370,7 @@ Class subcode M (mas : MAS M) (Sep : code -> Prop) :=
 
 Coercion elem : subcode >-> code.
 
-Class separator (M : Monad) (mas : MAS M) (mca : MCA mas) (mod : MMod mca) : Type :=
+Class separator (M : Monad) (mas : MAS M) (mca : MCA mas) (mod : MMod mas) : Type :=
   {
     subset : code -> Prop;
     Sep1 : ccomplete subset;
@@ -402,7 +401,7 @@ Notation p2 :=
 Ltac simpl_mca :=
   progress repeat (rewrite ?lam_S, ?lam_O; autorewrite with subs eval; rewrite ?lunit, ?runit).
 
-Instance MCA_EF M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) (sep : separator mod) : EF.
+Instance MCA_EF M (mas : MAS M) (mca : MCA mas) (mod : MMod mas) (sep : separator mca mod) : EF.
 Proof.
   unshelve econstructor.
 
@@ -479,7 +478,7 @@ Defined.
 
 Print Assumptions MCA_EF.
 
-Lemma agreement M (mas : MAS M) (mca : MCA mas) (mod : MMod mca) (sep : separator mod) :
+Lemma agreement M (mas : MAS M) (mca : MCA mas) (mod : MMod mas) (sep : separator mca mod) :
   (htop <= hbot) <-> exists e, erel top e bot.
 Proof.
   split; intros H.
