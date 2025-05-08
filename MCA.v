@@ -165,10 +165,33 @@ Section SK.
   Ltac simpl_monad :=
     progress repeat (rewrite ?lunit, ?assoc).
 
+  Derive Signature for t.
+
   Instance skmca : MCA mas.
-  Proof. split with (lam := @abs).
+  Proof.
+    assert (LKn : forall n,
+      Kncode (S (S n))
+      = Bcode2 Kcode (Kncode (S n))).
+    { intro n. simpl. reflexivity. }
+    assert (LKn1 : forall c n,
+      Kncode1 (S (S n)) c
+      = Kcode1 (Kncode1 (S n) c)).
+    { intro n. simpl. reflexivity. }
+    split with (lam := @abs).
   - intros n e c. induction e as [ x | c' | e1 Ih1 e2 Ih2 ].
-    * admit. (* TODO: prove for variables *)
+    * depelim x; simp subs; simp abs.
+      induction n as [|n IHn].
+        { simpl. rewrite appK. reflexivity. }
+        { rewrite LKn. unfold Bcode2.
+          rewrite appS2. rewrite appK1.
+          simpl_monad. rewrite IHn.
+          simpl_monad. rewrite appK.
+          rewrite LKn1. reflexivity. }
+      depelim x.
+        { simp abs. (* What is abs_obligation_1?!?! *)
+          (* ERROR!!!!!!!!! *)
+        }
+        
     * simp subs. simp abs.
     * simp subs. simp abs. induction n as [| n' Ihn ]; simpl.
       + unfold Bcode2. rewrite appS2.
