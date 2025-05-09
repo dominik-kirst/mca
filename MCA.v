@@ -235,42 +235,6 @@ End SK.
 
 
 
-(* Evidenced Frames *)
-
-Class EF : Type :=
-{
-  prop : Type;
-  evid : Type;
-  erel : prop -> evid -> prop -> Prop;
-
-  top : prop;
-  bot : prop;
-  conj : prop -> prop -> prop;
-  uimp : prop -> (prop -> Prop) -> prop;
-
-  eid : evid;
-  eseq : evid -> evid -> evid;
-  etop : evid;
-  ebot : evid;
-  epair : evid -> evid -> evid;
-  efst : evid;
-  esnd : evid;
-  elam : evid -> evid;
-  erho : evid -> evid;
-
-  ef_refl phi : erel phi eid phi;
-  ef_trans phi1 phi2 phi3 e e' : erel phi1 e phi2 -> erel phi2 e' phi3 -> erel phi1 (eseq e e') phi3;
-  ef_top phi : erel phi etop top;
-  ef_bot phi : erel bot ebot phi;
-  ef_pair phi psi psi' e e' : erel phi e psi -> erel phi e' psi' -> erel phi (epair e e') (conj psi psi');
-  ef_fst phi psi : erel (conj phi psi) efst phi;
-  ef_snd phi psi : erel (conj phi psi) esnd psi;
-  ef_curry phi phi' P e : (forall psi, P psi -> erel (conj phi phi') e psi) -> erel phi (elam e) (uimp phi' P);
-  ef_uncurry phi phi' P e psi : erel phi e (uimp phi' P) -> P psi -> erel (conj phi phi') (erho e) psi;
-}.
-
-
-
 (* M-Modalities *)
 
 Class CHA : Type :=
@@ -293,7 +257,6 @@ Class CHA : Type :=
   ax_imp x y z : hrel (hmeet x y) z <-> hrel x (himp y z);
   ax_inf P x : (forall y, P y -> hrel x y) <-> hrel x (hinf P);
 }.
-
 
 Class MMod (M : Monad) : Type :=
 {
@@ -461,6 +424,42 @@ Coercion subset : separator >-> Funclass.
 
 
 
+(* Evidenced Frames *)
+
+Class EF : Type :=
+{
+  prop : Type;
+  evid : Type;
+  erel : prop -> evid -> prop -> Prop;
+
+  top : prop;
+  bot : prop;
+  conj : prop -> prop -> prop;
+  uimp : prop -> (prop -> Prop) -> prop;
+
+  eid : evid;
+  eseq : evid -> evid -> evid;
+  etop : evid;
+  ebot : evid;
+  epair : evid -> evid -> evid;
+  efst : evid;
+  esnd : evid;
+  elam : evid -> evid;
+  erho : evid -> evid;
+
+  ef_refl phi : erel phi eid phi;
+  ef_trans phi1 phi2 phi3 e e' : erel phi1 e phi2 -> erel phi2 e' phi3 -> erel phi1 (eseq e e') phi3;
+  ef_top phi : erel phi etop top;
+  ef_bot phi : erel bot ebot phi;
+  ef_pair phi psi psi' e e' : erel phi e psi -> erel phi e' psi' -> erel phi (epair e e') (conj psi psi');
+  ef_fst phi psi : erel (conj phi psi) efst phi;
+  ef_snd phi psi : erel (conj phi psi) esnd psi;
+  ef_curry phi phi' P e : (forall psi, P psi -> erel (conj phi phi') e psi) -> erel phi (elam e) (uimp phi' P);
+  ef_uncurry phi phi' P e psi : erel phi e (uimp phi' P) -> P psi -> erel (conj phi phi') (erho e) psi;
+}.
+
+
+
 (* Induced EF *)
 
 Notation "$0" :=
@@ -590,6 +589,10 @@ Qed.
 
 
 
+(* Examples *)
+
+(* Abstract termination predicates *)
+
 Section Examples.
 
 Class TER {M : Monad} (mod : MMod M) : Type :=
@@ -639,6 +642,8 @@ Proof.
       apply ax_imp.
       apply ax_mono.
 Defined.
+
+
 
 (* PCA *)
 
@@ -695,8 +700,6 @@ Proof.
   - cbn. intuition.
 Defined.
 
-Context { mas_part : MAS partiality_monad }.
-
 Definition partiality_modality : MMod partiality_monad.
 Proof.
   unshelve econstructor.
@@ -707,6 +710,8 @@ Proof.
   - cbn. intros A phi psi [P HP] []. cbn. intros H [a [H1 H2]].
     exists a. split; trivial. apply H. exists a. apply CE. intros []. intuition.
 Defined.
+
+Context { mas_part : MAS partiality_monad }.
 
 Lemma partiality_progress :
   forall c c', after (MMod := partiality_modality) (mapp c c') (fun _ => hbot) <= hbot.
@@ -743,8 +748,6 @@ Defined.
 
 Definition RCA := @MCA powerset_monad.
 
-Context { mas_power : MAS powerset_monad }.
-
 Definition pow_ang_modality : MMod powerset_monad.
 Proof.
   unshelve econstructor.
@@ -756,22 +759,13 @@ Proof.
     exists a. split; trivial. apply H. exists a. apply CE. intros []. intuition.
 Defined.
 
+Context { mas_power : MAS powerset_monad }.
+
 Lemma pow_ang_progress :
   forall c c', after (MMod := pow_ang_modality) (mapp c c') (fun _ => hbot) <= hbot.
 Proof.
   intros c c'. cbn. firstorder.
 Qed.
-
-Print Monad.
-
-(* Class TER M (mas : MAS M) : Type :=
-{
-  ter_pred A : M A -> Prop;
-  ter_ret A (x : A) : ter_pred (ret x);
-  ter_bind A B (x : M A) (f : A -> M B) : ter_pred x -> (forall a, ter_pred (f a)) -> ter_pred (bind x f);
-}.
-
-Coercion ter_pred : TER >-> Funclass. *)
 
 Definition pow_dem_naive_modality : MMod powerset_monad.
 Proof.
@@ -794,6 +788,7 @@ Defined.
 
 Definition pow_dem_modality (ter : TER pow_dem_naive_modality) : MMod powerset_monad :=
   term_mod ter.
+
 
 
 (* SCA *)
@@ -827,8 +822,6 @@ Defined.
 
 Definition SCA := @MCA state_monad.
 
-Context { mas_state : MAS state_monad }.
-
 Definition state_ang_modality : MMod state_monad.
 Proof.
   unshelve econstructor.
@@ -839,6 +832,8 @@ Proof.
   - cbn. intros phi psi P sig. intros A H (x & sig' & H1 & H2).
     exists x, sig'. split; trivial. admit.
 Admitted.
+
+Context { mas_state : MAS state_monad }.
 
 End SCA.
 
@@ -912,8 +907,6 @@ Defined.
 
 Definition ParCA := @MCA parametric_monad.
 
-Context { mas_par : MAS parametric_monad }.
-
 Definition parametric_modality : MMod parametric_monad.
 Proof.
   unshelve econstructor.
@@ -925,6 +918,8 @@ Proof.
   - cbn. intros A phi psi F []. intros H1 H2 p. destruct (H2 p) as (a & H3 & H4).
     exists a. split; trivial. apply H1. exists a. apply CE. intros []. intuition.
 Defined.
+
+Context { mas_par : MAS parametric_monad }.
 
 Lemma parametric_progress (p0 : Par) :
   forall c c', after (MMod := parametric_modality) (mapp c c') (fun _ => hbot) <= hbot.
