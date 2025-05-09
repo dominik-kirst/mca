@@ -764,27 +764,36 @@ Qed.
 
 Print Monad.
 
-Class TER M (mas : MAS M) : Type :=
+(* Class TER M (mas : MAS M) : Type :=
 {
   ter_pred A : M A -> Prop;
   ter_ret A (x : A) : ter_pred (ret x);
   ter_bind A B (x : M A) (f : A -> M B) : ter_pred x -> (forall a, ter_pred (f a)) -> ter_pred (bind x f);
 }.
 
-Coercion ter_pred : TER >-> Funclass.
+Coercion ter_pred : TER >-> Funclass. *)
 
-Definition pow_dem_modality (ter : TER mas_power) : MMod powerset_monad.
+Definition pow_dem_naive_modality : MMod powerset_monad.
 Proof.
   unshelve econstructor.
   - exact (sub_cha unit).
-  - intros A m phi. exact (fun x => ter A m /\ forall a, m a -> phi a x).
-  - intros A x phi [] H. split; try apply ter_ret. cbn. now intros a ->.
-  - cbn. intros A B f phi P [] [H1 H2]. split.
-    + specialize (@ter_bind _ _ ter A B P). cbn. intros H'. apply H'; trivial. admit.
-    + intros b [a HA]. now apply (H2 a).
-  - admit.
-Admitted.
+  - intros A m phi. exact (fun x => forall a, m a -> phi a x).
+  - cbn. intros A x1 phi [] H x2 E.
+    rewrite <- E. apply H.
+  - cbn. intros A B f phi P [] H y [ x [ p Fxy ] ].
+    + eapply H. apply p. apply Fxy.
+  - cbn. intros A phi psi m un H1 H2 x mx.
+    destruct un.
+    apply H1. exists x.
+    apply CE. intros un. destruct un.
+    split.
+    + intros psi_x_tt phi_x_tt. exact psi_x_tt.
+    + intros phi_psi. apply phi_psi.
+      apply H2. apply mx.
+Defined.
 
+Definition pow_dem_modality (ter : TER pow_dem_naive_modality) : MMod powerset_monad :=
+  term_mod ter.
 
 
 (* SCA *)
