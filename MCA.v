@@ -332,6 +332,45 @@ Section MMod.
   Proof.
     apply ax_meet. apply ax_meet2. apply ax_meet1.
   Qed.
+  
+  Lemma ax_meet_assoc x y z :
+    hmeet (hmeet x y) z <= hmeet x (hmeet y z).
+  Proof.
+    apply ax_meet. eapply ax_trans.
+    apply ax_meet1. apply ax_meet1.
+    apply ax_meet. eapply ax_trans.
+    apply ax_meet1. apply ax_meet2.
+    apply ax_meet2.
+  Qed.
+
+  Lemma ax_meet_assoc_inv x y z :
+    hmeet x (hmeet y z) <= hmeet (hmeet x y) z.
+  Proof.
+    apply ax_meet. apply ax_meet.
+    apply ax_meet1. eapply ax_trans.
+    apply ax_meet2. apply ax_meet1.
+    eapply ax_trans. apply ax_meet2.
+    apply ax_meet2.
+  Qed.
+
+  Lemma ax_meet_left l x y :
+    x <= y
+    -> hmeet l x <= hmeet l y.
+  Proof.
+    intro H. apply ax_meet.
+    apply ax_meet1. eapply ax_trans.
+    apply ax_meet2. exact H.
+  Qed.
+
+  Lemma ax_meet_right r x y :
+    x <= y
+    -> hmeet x r <= hmeet y r.
+  Proof.
+    intro H. apply ax_meet.
+    eapply ax_trans.
+    apply ax_meet1. exact H.
+    apply ax_meet2.
+  Qed.
 
   Lemma ax_inf' P x :
     P x -> hinf P <= x.
@@ -345,28 +384,28 @@ Section MMod.
     intros H. apply ax_imp. rewrite <- H. apply ax_imp. reflexivity.
   Qed.
 
-  Lemma ax_mono_ext' (phi psi : code -> Omega) m x :
+  Lemma ax_mono_ext' {A} (phi psi : A -> Omega) m x :
     (forall c, hmeet x (phi c) <= psi c) -> hmeet x (after m phi) <= after m psi.
   Proof.
     intros H. apply ax_imp. rewrite <- ax_mono.
     apply ax_inf. intros y [c ->]. apply ax_imp, H.
   Qed.
 
-  Lemma ax_mono_ext (phi psi : code -> Omega) m :
+  Lemma ax_mono_ext {A} (phi psi : A -> Omega) m :
     (forall c, phi c <= psi c) -> after m phi <= after m psi.
   Proof.
-    intros H. erewrite <- (@ax_mono_ext' phi psi m htop).
+    intros H. erewrite <- (@ax_mono_ext' A phi psi m htop).
     - apply ax_meet; try reflexivity. apply ax_top.
     - intros c. rewrite ax_meet2. apply H.
   Qed.
 
-  Lemma ax_mono_meet (phi : code -> Omega) m x :
+  Lemma ax_mono_meet {A} (phi : A -> Omega) m x :
     hmeet x (after m phi) <= after m (fun a => hmeet x (phi a)).
   Proof.
     apply ax_mono_ext'. reflexivity.
   Qed.
 
-  Lemma ax_mono_imp (phi : code -> Omega) m x :
+  Lemma ax_mono_imp {A} (phi : A -> Omega) m x :
     after m (fun a => himp x (phi a)) <= himp x (after m phi).
   Proof.
     apply ax_imp. rewrite ax_meet_comm. apply ax_mono_ext'.
@@ -551,9 +590,57 @@ Qed.
 
 
 
-(* PCA *)
-
 Section Examples.
+
+Class TER {M : Monad} (mod : MMod M) : Type :=
+{
+  ter_pred A : M A -> Omega;
+  ter_ret A (x : A) : htop <= ter_pred (ret x);
+  ter_bind A B (m : M A) (f : A -> M B) :
+    hmeet (ter_pred m) (after m (fun x => ter_pred (f x)))
+    <= ter_pred (bind m f);
+}.
+
+Definition term_mod {M : Monad}
+  (mod : MMod M) (trm : TER mod)
+  : MMod M.
+Proof.
+  unshelve econstructor.
+  - intros A m phi.
+    exact (hmeet (ter_pred m) (after m phi)).
+  - intros A x phi.
+    apply ax_meet.
+    * eapply ax_trans.
+      apply ax_top. apply ter_ret.
+    * apply ax_ret.
+  - intros A B f phi m.
+    apply ax_meet.
+    * eapply ax_trans.
+
+      + apply ax_meet_left.
+        apply ax_mono_ext.
+        intro c. apply ax_meet1.
+      + apply ter_bind.
+    * eapply ax_trans. eapply ax_trans.
+      + apply ax_meet2.
+      + apply ax_mono_ext.
+        intro c. apply ax_meet2.
+      + apply ax_bind.
+  - intros A phi psi m.
+    apply ax_imp.
+    eapply ax_trans.
+    eapply ax_trans.
+    eapply ax_trans.
+    * apply ax_meet_assoc_inv.
+    * apply ax_meet_right.
+      apply ax_meet_comm.
+    * apply ax_meet_assoc.
+    * apply ax_meet_left.
+      apply ax_imp.
+      apply ax_mono.
+Defined.
+
+(* PCA *)
 
 Definition subsingleton A :=
   { P : A -> Prop | forall x y, P x -> P y -> x = y }.
