@@ -589,10 +589,10 @@ Defined.
 
 Definition PCA := @MCA partiality_monad.
 
-Definition sub_cha : CHA.
+Definition sub_cha (X : Type) : CHA.
 Proof.
   unshelve econstructor.
-  - exact (unit -> Prop).
+  - exact (X -> Prop).
   - intros p q. exact (forall x, p x -> q x).
   - exact (fun _ => True).
   - exact (fun _ => False).
@@ -615,7 +615,7 @@ Context { mas_part : MAS partiality_monad }.
 Definition partiality_modality : MMod mas_part.
 Proof.
   unshelve econstructor.
-  - exact sub_cha.
+  - exact (sub_cha unit).
   - intros A m phi. exact (fun x => exists a, proj1_sig m a /\ phi a x).
   - cbn. eauto.
   - cbn. intros A B f phi [P HP] []. cbn. firstorder.
@@ -663,7 +663,7 @@ Context { mas_power : MAS powerset_monad }.
 Definition pow_ang_modality : MMod mas_power.
 Proof.
   unshelve econstructor.
-  - exact sub_cha.
+  - exact (sub_cha unit).
   - intros A m phi. exact (fun x => exists a, m a /\ phi a x).
   - cbn. eauto.
   - cbn. intros A B f phi P []. cbn. firstorder.
@@ -691,7 +691,7 @@ Coercion ter_pred : TER >-> Funclass.
 Definition pow_dem_modality (ter : TER mas_power) : MMod mas_power.
 Proof.
   unshelve econstructor.
-  - exact sub_cha.
+  - exact (sub_cha unit).
   - intros A m phi. exact (fun x => ter A m /\ forall a, m a -> phi a x).
   - intros A x phi [] H. split; try apply ter_ret. cbn. now intros a ->.
   - cbn. intros A B f phi P [] [H1 H2]. split.
@@ -806,3 +806,5 @@ Defined.
 Definition ParCA := @MCA parametric_monad.
 
 End ParCA.
+
+End Examples.
