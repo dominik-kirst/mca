@@ -187,10 +187,7 @@ Section SK.
           simpl_monad. rewrite IHn.
           simpl_monad. rewrite appK.
           rewrite LKn1. reflexivity. }
-      depelim x.
-        { simp abs. cbn. unfold abs_obligation_1. now rewrite appK1. 
-        }
-        
+      depelim x. simp abs. simp abs.
     * simp subs. simp abs.
     * simp subs. simp abs. induction n as [| n' Ihn ]; simpl.
       + unfold Bcode2. rewrite appS2.
@@ -212,13 +209,20 @@ Section SK.
         rewrite Ih2.      simpl_monad.
         rewrite appS1. reflexivity.
   - intros e c. induction e as [ x | c' | e1 Ih1 e2 Ih2 ].
-    * admit. (* TODO: prove for variables *)
+    * depelim x.
+      { simp abs. simp subs.
+        simp eval. simpl.
+        unfold Icode.
+        rewrite appS2. rewrite appK.
+        simpl_monad. rewrite appK1.
+        reflexivity. }
+      depelim x. 
     * simp subs. simp abs.
     * simp subs. simp abs.
       unfold Sncode2. rewrite appS2.
       rewrite Ih1. simp eval.
       rewrite Ih2. reflexivity.
-  Admitted.
+  Defined.
 
 End SK.
 
