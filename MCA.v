@@ -261,7 +261,7 @@ Class EF : Type :=
 
 (* M-Modalities *)
 
-Class MMod (M : Monad) (mas : MAS M) : Type :=
+Class CHA : Type :=
 {
   Omega : Type;
   hrel : Omega -> Omega -> Prop;
@@ -270,8 +270,6 @@ Class MMod (M : Monad) (mas : MAS M) : Type :=
   hmeet : Omega -> Omega -> Omega;
   himp : Omega -> Omega -> Omega;
   hinf : (Omega -> Prop) -> Omega;
-
-  after A : M A -> (A -> Omega) -> Omega;
 
   ax_refl x : hrel x x;
   ax_trans x y z : hrel x y -> hrel y z -> hrel x z;
@@ -282,13 +280,22 @@ Class MMod (M : Monad) (mas : MAS M) : Type :=
   ax_meet x y z : hrel z x -> hrel z y -> hrel z (hmeet x y);
   ax_imp x y z : hrel (hmeet x y) z <-> hrel x (himp y z);
   ax_inf P x : (forall y, P y -> hrel x y) <-> hrel x (hinf P);
+}.
+
+
+Class MMod (M : Monad) (mas : MAS M) : Type :=
+{
+  cha : CHA;
+  after A : M A -> (A -> Omega) -> Omega;
 
   ax_ret A x (phi : A -> Omega) : hrel (phi x) (after (ret x) phi);
   ax_bind A B (f : A -> M B) phi m : hrel (after m (fun x => after (f x) phi)) (after (bind m f) phi);
   ax_mono (phi psi : code -> Omega) m : hrel (hinf (fun x => exists c, x = himp (phi c) (psi c))) (himp (after m phi) (after m psi));
 }.
 
-Add Parametric Relation M (mas : MAS M) (mod : MMod mas) :
+Existing Instance cha.
+
+Add Parametric Relation (cha : CHA) :
   Omega hrel
   reflexivity proved by ax_refl
   transitivity proved by ax_trans
@@ -534,6 +541,8 @@ Qed.
 
 (* PCA *)
 
+Section Examples.
+
 Definition subsingleton A :=
   { P : A -> Prop | forall x y, P x -> P y -> x = y }.
 
@@ -565,6 +574,48 @@ Proof.
 Defined.
 
 Definition PCA := @MCA partiality_monad.
+
+Definition sub_cha : CHA.
+Proof.
+  unshelve econstructor.
+  - exact (unit -> Prop).
+  - intros p q. exact (forall x, p x -> q x).
+  - exact (fun _ => True).
+  - exact (fun _ => False).
+  - intros p q. exact (fun x => p x /\ q x).
+  - intros p q. exact (fun x => p x -> q x).
+  - intros P. exact (fun x => forall q, P q -> q x).
+  - cbn. tauto.
+  - cbn. intuition.
+  - cbn. tauto.
+  - cbn. tauto.
+  - cbn. tauto.
+  - cbn. tauto.
+  - cbn. intuition.
+  - cbn. intuition.
+  - cbn. intuition.
+Defined.
+
+Context { mas_part : MAS partiality_monad }.
+
+Print MMod.
+
+Instance partiality_modality : MMod mas_part.
+Proof.
+  unshelve econstructor.
+  - exact sub_cha.
+  - intros A m phi. exact (fun x => exists a, proj1_sig m a /\ phi a x).
+  - cbn. eauto.
+  - cbn. intros A B f phi [P HP] []. cbn. firstorder.
+  - cbn. intros phi psi [P HP] []. cbn. intros H [a [H1 H2]].
+    exists a. split; trivial. apply H. exists a. apply CE. intros []. intuition.
+Defined.
+
+Lemma partiality_progress :
+  forall c c', after (mapp c c') (fun _ => hbot) <= hbot.
+Proof.
+  intros c c'. cbn. firstorder.
+Qed.
 
 
 
