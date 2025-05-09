@@ -733,6 +733,19 @@ Defined.
 
 Definition SCA := @MCA state_monad.
 
+Context { mas_state : MAS state_monad }.
+
+Definition state_ang_modality : MMod mas_state.
+Proof.
+  unshelve econstructor.
+  - exact (sub_cha Sig).
+  - intros A m phi. exact (fun sig => exists x sig', m sig (sig', x) /\ phi x sig').
+  - cbn. eauto.
+  - cbn. intros A B f phi P sig. firstorder eauto.
+  - cbn. intros phi psi P sig. intros H (x & sig' & H1 & H2).
+    exists x, sig'. split; trivial. admit.
+Admitted.
+
 End SCA.
 
 
@@ -804,6 +817,26 @@ unshelve eapply (Build_Monad (M := par)).
 Defined.
 
 Definition ParCA := @MCA parametric_monad.
+
+Context { mas_par : MAS parametric_monad }.
+
+Definition parametric_modality : MMod mas_par.
+Proof.
+  unshelve econstructor.
+  - exact (sub_cha unit).
+  - intros A m phi. exact (fun x => forall p, exists a, proj1_sig (m p) a /\ phi a x).
+  - cbn. eauto.
+  - cbn. intros A B f phi F []. intros H p.
+    destruct (H p) as (a & H1 & H2). firstorder eauto.
+  - cbn. intros phi psi F []. intros H1 H2 p. destruct (H2 p) as (a & H3 & H4).
+    exists a. split; trivial. apply H1. exists a. apply CE. intros []. intuition.
+Defined.
+
+Lemma parametric_progress (p0 : Par) :
+  forall c c', after (MMod := parametric_modality) (mapp c c') (fun _ => hbot) <= hbot.
+Proof.
+  intros c c'. cbn. firstorder.
+Qed.
 
 End ParCA.
 
