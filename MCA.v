@@ -187,8 +187,14 @@ Section SK.
           simpl_monad. rewrite IHn.
           simpl_monad. rewrite appK.
           rewrite LKn1. reflexivity. }
-      depelim x. simp abs. simp abs.
+      depelim x.
+        { simp abs.
+          unfold abs_obligation_1.
+          rewrite appK1. reflexivity. }
+        simp abs.
     * simp subs. simp abs.
+      rewrite LKn1. rewrite appK1.
+      reflexivity.
     * simp subs. simp abs. induction n as [| n' Ihn ]; simpl.
       + unfold Bcode2. rewrite appS2.
         rewrite appS2.    simpl_monad.
@@ -218,6 +224,8 @@ Section SK.
         reflexivity. }
       depelim x. 
     * simp subs. simp abs.
+      rewrite appK1. simp eval.
+      reflexivity.
     * simp subs. simp abs.
       unfold Sncode2. rewrite appS2.
       rewrite Ih1. simp eval.
