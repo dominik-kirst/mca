@@ -4,8 +4,6 @@ Unset Strict Implicit.
 Require Import Lia Fin.
 From Equations.Prop Require Import Equations.
 
-(* Axiom!!! *)
-Require Import Coq.Logic.FunctionalExtensionality.
 
 
 (* Monads *)
