@@ -1,3 +1,6 @@
 -R . ""
 
+-arg -w -arg -notation-overridden
+COQDOCFLAGS = "--charset utf-8 -s --with-header docs/resources/header.html --with-footer docs/resources/footer.html --index indexpage"
+
 MCA.v
