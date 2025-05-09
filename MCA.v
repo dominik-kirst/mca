@@ -61,6 +61,7 @@ Class MCA (M : Monad) (mas : MAS M) :=
 Arguments lam {_ _ _} _ _.
 
 
+
 (* SK Definition *)
 
 Section SK.
@@ -225,6 +226,7 @@ Section SK.
   Defined.
 
 End SK.
+
 
 
 (* Evidenced Frames *)
@@ -602,9 +604,7 @@ Defined.
 
 Context { mas_part : MAS partiality_monad }.
 
-Print MMod.
-
-Instance partiality_modality : MMod mas_part.
+Definition partiality_modality : MMod mas_part.
 Proof.
   unshelve econstructor.
   - exact sub_cha.
@@ -616,7 +616,7 @@ Proof.
 Defined.
 
 Lemma partiality_progress :
-  forall c c', after (mapp c c') (fun _ => hbot) <= hbot.
+  forall c c', after (MMod := partiality_modality) (mapp c c') (fun _ => hbot) <= hbot.
 Proof.
   intros c c'. cbn. firstorder.
 Qed.
@@ -649,6 +649,48 @@ Proof.
 Defined.
 
 Definition RCA := @MCA powerset_monad.
+
+Context { mas_power : MAS powerset_monad }.
+
+Definition pow_ang_modality : MMod mas_power.
+Proof.
+  unshelve econstructor.
+  - exact sub_cha.
+  - intros A m phi. exact (fun x => exists a, m a /\ phi a x).
+  - cbn. eauto.
+  - cbn. intros A B f phi P []. cbn. firstorder.
+  - cbn. intros phi psi P []. cbn. intros H [a [H1 H2]].
+    exists a. split; trivial. apply H. exists a. apply CE. intros []. intuition.
+Defined.
+
+Lemma pow_ang_progress :
+  forall c c', after (MMod := pow_ang_modality) (mapp c c') (fun _ => hbot) <= hbot.
+Proof.
+  intros c c'. cbn. firstorder.
+Qed.
+
+Print Monad.
+
+Class TER M (mas : MAS M) : Type :=
+{
+  ter_pred A : M A -> Prop;
+  ter_ret A (x : A) : ter_pred (ret x);
+  ter_bind A B (x : M A) (f : A -> M B) : ter_pred x -> (forall a, ter_pred (f a)) -> ter_pred (bind x f);
+}.
+
+Coercion ter_pred : TER >-> Funclass.
+
+Definition pow_dem_modality (ter : TER mas_power) : MMod mas_power.
+Proof.
+  unshelve econstructor.
+  - exact sub_cha.
+  - intros A m phi. exact (fun x => ter A m /\ forall a, m a -> phi a x).
+  - intros A x phi [] H. split; try apply ter_ret. cbn. now intros a ->.
+  - cbn. intros A B f phi P [] [H1 H2]. split.
+    + specialize (@ter_bind _ _ ter A B P). cbn. intros H'. apply H'; trivial. admit.
+    + intros b [a HA]. now apply (H2 a).
+  - admit.
+Admitted.
 
 
 
