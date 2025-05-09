@@ -295,14 +295,14 @@ Class CHA : Type :=
 }.
 
 
-Class MMod (M : Monad) (mas : MAS M) : Type :=
+Class MMod (M : Monad) : Type :=
 {
   cha : CHA;
   after A : M A -> (A -> Omega) -> Omega;
 
   ax_ret A x (phi : A -> Omega) : hrel (phi x) (after (ret x) phi);
   ax_bind A B (f : A -> M B) phi m : hrel (after m (fun x => after (f x) phi)) (after (bind m f) phi);
-  ax_mono (phi psi : code -> Omega) m : hrel (hinf (fun x => exists c, x = himp (phi c) (psi c))) (himp (after m phi) (after m psi));
+  ax_mono A (phi psi : A -> Omega) m : hrel (hinf (fun x => exists c, x = himp (phi c) (psi c))) (himp (after m phi) (after m psi));
 }.
 
 Existing Instance cha.
@@ -319,7 +319,7 @@ Section MMod.
 
   Context {M : Monad}.
   Context {mas : MAS M}.
-  Context {mod : MMod mas }.
+  Context {mod : MMod M }.
 
   Lemma ax_refl' x x' :
     x = x' -> x <= x'.
@@ -384,7 +384,7 @@ Section Sep.
   Context {M : Monad}.
   Context {mas : MAS M}.
   Context {mca : MCA mas}.
-  Context {mod : MMod mas }.
+  Context {mod : MMod M }.
 
   Variable sep : code -> Prop.
 
@@ -411,7 +411,7 @@ Class subcode M (mas : MAS M) (Sep : code -> Prop) :=
 
 Coercion elem : subcode >-> code.
 
-Class separator (M : Monad) (mas : MAS M) (mca : MCA mas) (mod : MMod mas) : Type :=
+Class separator (M : Monad) (mas : MAS M) (mca : MCA mas) (mod : MMod M) : Type :=
   {
     subset : code -> Prop;
     Sep1 : ccomplete subset;
@@ -442,7 +442,7 @@ Notation p2 :=
 Ltac simpl_mca :=
   progress repeat (rewrite ?lam_S, ?lam_O; autorewrite with subs eval; rewrite ?lunit, ?runit).
 
-Instance MCA_EF M (mas : MAS M) (mca : MCA mas) (mod : MMod mas) (sep : separator mca mod) : EF.
+Instance MCA_EF M (mas : MAS M) (mca : MCA mas) (mod : MMod M) (sep : separator mca mod) : EF.
 Proof.
   unshelve econstructor.
 
@@ -519,7 +519,7 @@ Defined.
 
 Print Assumptions MCA_EF.
 
-Lemma agreement M (mas : MAS M) (mca : MCA mas) (mod : MMod mas) (sep : separator mca mod) :
+Lemma agreement M (mas : MAS M) (mca : MCA mas) (mod : MMod M) (sep : separator mca mod) :
   (htop <= hbot) <-> exists e, erel top e bot.
 Proof.
   split; intros H.
@@ -610,14 +610,14 @@ Defined.
 
 Context { mas_part : MAS partiality_monad }.
 
-Definition partiality_modality : MMod mas_part.
+Definition partiality_modality : MMod partiality_monad.
 Proof.
   unshelve econstructor.
   - exact (sub_cha unit).
   - intros A m phi. exact (fun x => exists a, proj1_sig m a /\ phi a x).
   - cbn. eauto.
   - cbn. intros A B f phi [P HP] []. cbn. firstorder.
-  - cbn. intros phi psi [P HP] []. cbn. intros H [a [H1 H2]].
+  - cbn. intros A phi psi [P HP] []. cbn. intros H [a [H1 H2]].
     exists a. split; trivial. apply H. exists a. apply CE. intros []. intuition.
 Defined.
 
@@ -658,14 +658,14 @@ Definition RCA := @MCA powerset_monad.
 
 Context { mas_power : MAS powerset_monad }.
 
-Definition pow_ang_modality : MMod mas_power.
+Definition pow_ang_modality : MMod powerset_monad.
 Proof.
   unshelve econstructor.
   - exact (sub_cha unit).
   - intros A m phi. exact (fun x => exists a, m a /\ phi a x).
   - cbn. eauto.
   - cbn. intros A B f phi P []. cbn. firstorder.
-  - cbn. intros phi psi P []. cbn. intros H [a [H1 H2]].
+  - cbn. intros A phi psi P []. cbn. intros H [a [H1 H2]].
     exists a. split; trivial. apply H. exists a. apply CE. intros []. intuition.
 Defined.
 
@@ -686,7 +686,7 @@ Class TER M (mas : MAS M) : Type :=
 
 Coercion ter_pred : TER >-> Funclass.
 
-Definition pow_dem_modality (ter : TER mas_power) : MMod mas_power.
+Definition pow_dem_modality (ter : TER mas_power) : MMod powerset_monad.
 Proof.
   unshelve econstructor.
   - exact (sub_cha unit).
@@ -733,14 +733,14 @@ Definition SCA := @MCA state_monad.
 
 Context { mas_state : MAS state_monad }.
 
-Definition state_ang_modality : MMod mas_state.
+Definition state_ang_modality : MMod state_monad.
 Proof.
   unshelve econstructor.
   - exact (sub_cha Sig).
   - intros A m phi. exact (fun sig => exists x sig', m sig (sig', x) /\ phi x sig').
   - cbn. eauto.
   - cbn. intros A B f phi P sig. firstorder eauto.
-  - cbn. intros phi psi P sig. intros H (x & sig' & H1 & H2).
+  - cbn. intros phi psi P sig. intros A H (x & sig' & H1 & H2).
     exists x, sig'. split; trivial. admit.
 Admitted.
 
@@ -818,7 +818,7 @@ Definition ParCA := @MCA parametric_monad.
 
 Context { mas_par : MAS parametric_monad }.
 
-Definition parametric_modality : MMod mas_par.
+Definition parametric_modality : MMod parametric_monad.
 Proof.
   unshelve econstructor.
   - exact (sub_cha unit).
@@ -826,7 +826,7 @@ Proof.
   - cbn. eauto.
   - cbn. intros A B f phi F []. intros H p.
     destruct (H p) as (a & H1 & H2). firstorder eauto.
-  - cbn. intros phi psi F []. intros H1 H2 p. destruct (H2 p) as (a & H3 & H4).
+  - cbn. intros A phi psi F []. intros H1 H2 p. destruct (H2 p) as (a & H3 & H4).
     exists a. split; trivial. apply H1. exists a. apply CE. intros []. intuition.
 Defined.
 
