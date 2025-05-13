@@ -619,7 +619,6 @@ Proof.
   - intros A B f phi m.
     apply ax_meet.
     * eapply ax_trans.
-
       + apply ax_meet_left.
         apply ax_mono_ext.
         intro c. apply ax_meet1.
@@ -789,14 +788,6 @@ Defined.
 Definition pow_dem_modality (ter : TER pow_dem_naive_modality) : MMod powerset_monad :=
   term_mod ter.
 
-Print TER.
-
-Lemma pow_dem_progress (ter : TER pow_dem_naive_modality) :
-  forall c c', after (MMod := pow_dem_modality ter) (mapp c c') (fun _ => hbot) <= hbot.
-Proof.
-  intros c c' []. cbn. 
-Qed.
-
 
 
 (* SCA *)
@@ -868,19 +859,36 @@ Definition state_ang_modality : MMod state_monad.
 Proof.
   unshelve econstructor.
   - exact state_cha.
-  - intros A [m Hm] phi. exists (fun sig => exists x sig', m sig (sig', x) /\ proj1_sig (phi x) sig').
-    intros sig sig' H (x & sig0 & H1 & H2).
-    exists x, sig0. split; trivial. 
-  - cbn. eauto.
-  - cbn. intros A B f phi [m Hm] sig. intros (x & sig' & H1 & H2).
-    cbn. destruct (f x) eqn : Hf. destruct H2 as (y & sig'' & H3 & H4).
-    exists y, sig''. split; trivial. exists sig', x. split; trivial.
-    rewrite Hf. cbn. apply H3.
-  - cbn. intros A phi psi [m Hm] sig H1. intros (x & sig' & H2 & H3).
+  - intros A [m Hm] phi. exists (fun sig => forall sig2, srel sig sig2 -> exists x sig', m sig2 (sig', x) /\ proj1_sig (phi x) sig').
+    intros sig sig' H H' sig2 Hs. destruct (H' sig2) as (x & sig0 & H1 & H2).
+    + apply srel_tran with sig'; trivial.
+    + exists x, sig0. split; trivial.
+  - cbn. intros A x phi sig H1 sig2 HS. exists x, sig2. split; trivial.
+    destruct (phi x) as [p Hp]. cbn in *. now apply Hp with sig.
+  - cbn. intros A B f phi [m Hm] sig H sig2 HS. cbn in *.
+    destruct (H sig2) as (x & sig' & H1 & H2); trivial.
+    destruct (f x) eqn : Hf. cbn in *.
+    destruct (H2 sig') as (y & sig'' & H3 & H4); trivial.
+    exists y, sig''. split; trivial. exists sig', x. rewrite Hf. split; trivial.
+  - cbn. intros A phi psi [m Hm] sig H sig2 HS. cbn.
+    intros H' sig3 HS'. destruct (H' sig3) as (x & sig' & H1 & H2); trivial.
     exists x, sig'. split; trivial.
-Admitted.
+    specialize (H (@himp state_cha (phi x) (psi x))).
+    assert (HP : proj1_sig (@himp state_cha (phi x) (psi x)) sig).
+    + apply H. exists x. reflexivity.
+    + cbn in HP. destruct (phi x), (psi x); cbn in *. apply HP; trivial.
+      apply srel_tran with sig2; trivial.
+      apply srel_tran with sig3; trivial. eapply Hm. eauto.
+Defined.
 
 Context { mas_state : MAS state_monad }.
+
+Lemma state_ang_progress :
+  forall c c', after (MMod := state_ang_modality) (mapp c c') (fun _ => hbot) <= hbot.
+Proof.
+  intros c c'. cbn. intros sig. cbn. destruct (mapp c c'). cbn.
+  intros H. destruct (H sig) as (_ & _ & _ & []). apply srel_refl.
+Qed.
 
 End SCA.
 
