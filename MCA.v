@@ -789,6 +789,14 @@ Defined.
 Definition pow_dem_modality (ter : TER pow_dem_naive_modality) : MMod powerset_monad :=
   term_mod ter.
 
+Print TER.
+
+Lemma pow_dem_progress (ter : TER pow_dem_naive_modality) :
+  forall c c', after (MMod := pow_dem_modality ter) (mapp c c') (fun _ => hbot) <= hbot.
+Proof.
+  intros c c' []. cbn. 
+Qed.
+
 
 
 (* SCA *)
@@ -796,41 +804,80 @@ Definition pow_dem_modality (ter : TER pow_dem_naive_modality) : MMod powerset_m
 Section SCA.
 
 Variable Sig : Type.
+Variable srel : Sig -> Sig -> Prop.
+Hypothesis srel_refl : forall x, srel x x.
+Hypothesis srel_tran : forall x y z, srel x y -> srel y z -> srel x z.
 
 Definition state A :=
-  Sig -> powerset (prod Sig A).
+  { m : Sig -> powerset (prod Sig A) | forall sig0 sig1 x, m sig0 (sig1, x) -> srel sig0 sig1 }.
 
 Lemma state_eq A (m m' : state A) :
-  (forall sig p, m sig p <-> m' sig p) -> m = m'.
+  (forall sig p, proj1_sig m sig p <-> proj1_sig m' sig p) -> m = m'.
 Proof.
-  intros H. apply FE. intros sig. apply CE. apply H.
+  intros H. destruct m, m'. cbn in H.
+  assert (x = x0) as <-.
+  { apply FE. intros sig. apply CE. apply H. }
+  f_equal. apply PI.
 Qed.
 
 Definition state_monad : Monad.
 Proof.
   unshelve eapply (Build_Monad (M := state)).
-  - intros A x. exact (fun sig => eq (sig, x)).
-  - intros A B m f. exact (fun sig p => exists sig' x, m sig (sig', x) /\ f x sig' p).
-  - cbn. intros A m. apply state_eq. intros sig [sig' x']. split; eauto.
+  - intros A x. exists (fun sig => eq (sig, x)).
+    intros sig0 sig1 x0 [=]. subst. apply srel_refl.
+  - intros A B m f. exists (fun sig p => exists sig' x, proj1_sig m sig (sig', x) /\ proj1_sig (f x) sig' p).
+    intros sig0 sig1 x (sig' & x0 & H1 & H2). apply srel_tran with sig'.
+    + eapply (proj2_sig m). apply H1.
+    + eapply (proj2_sig (f x0)). apply H2.
+  - cbn. intros A m. apply state_eq. cbn. intros sig [sig' x']. split; eauto.
     intros [rho [x [H [=]]]]; subst. apply H.
-  - cbn. intros A B f x. apply state_eq. intros sig [sig' x']. split; eauto.
+  - cbn. intros A B f x. apply state_eq. cbn. intros sig [sig' x']. split; eauto.
     intros [rho [y [[=] H']]]; subst. apply H'.
-  - cbn. intros A B C f g m. apply state_eq. intros sig [sig' z]. split.
+  - cbn. intros A B C f g m. apply state_eq. cbn. intros sig [sig' z]. split.
     + intros (rho & y & (rho' & x & H1 & H2) & H3). firstorder eauto.
     + intros (rho & x & H1 & (rho' & y & H3 & H4)). firstorder eauto.
 Defined.
 
 Definition SCA := @MCA state_monad.
 
+Definition state_cha : CHA.
+Proof.
+  unshelve econstructor.
+  - exact { p : Sig -> Prop | forall sig sig', srel sig sig' -> p sig -> p sig' }.
+  - intros p q. exact (forall x, proj1_sig p x -> proj1_sig q x).
+  - exists (fun _ => True). tauto.
+  - exists (fun _ => False). tauto.
+  - intros [p Hp] [q Hq]. exists (fun x => p x /\ q x). firstorder.
+  - intros [p Hp] [q Hq]. exists (fun x => forall y, srel x y -> p y -> q y).
+    intros. apply H0; trivial. eapply srel_tran; eauto.
+  - intros P. exists (fun x => forall q, P q -> proj1_sig q x).
+    intros sig sig' H H' p HP. specialize (H' p). destruct p as [p Hp].
+    cbn in *. apply (Hp sig); trivial. now apply H'.
+  - cbn. tauto.
+  - cbn. intuition.
+  - cbn. tauto.
+  - cbn. tauto.
+  - intros [p Hp] [q Hq]. cbn. tauto.
+  - intros [p Hp] [q Hq]. cbn. tauto.
+  - intros [p Hp] [q Hq]. cbn. intuition.
+  - intros [p Hp] [q Hq] [r Hr]. intros. cbn. firstorder.
+  - intros P. cbn. intuition.
+Defined.
+
 Definition state_ang_modality : MMod state_monad.
 Proof.
   unshelve econstructor.
-  - exact (sub_cha Sig).
-  - intros A m phi. exact (fun sig => exists x sig', m sig (sig', x) /\ phi x sig').
+  - exact state_cha.
+  - intros A [m Hm] phi. exists (fun sig => exists x sig', m sig (sig', x) /\ proj1_sig (phi x) sig').
+    intros sig sig' H (x & sig0 & H1 & H2).
+    exists x, sig0. split; trivial. 
   - cbn. eauto.
-  - cbn. intros A B f phi P sig. firstorder eauto.
-  - cbn. intros phi psi P sig. intros A H (x & sig' & H1 & H2).
-    exists x, sig'. split; trivial. admit.
+  - cbn. intros A B f phi [m Hm] sig. intros (x & sig' & H1 & H2).
+    cbn. destruct (f x) eqn : Hf. destruct H2 as (y & sig'' & H3 & H4).
+    exists y, sig''. split; trivial. exists sig', x. split; trivial.
+    rewrite Hf. cbn. apply H3.
+  - cbn. intros A phi psi [m Hm] sig H1. intros (x & sig' & H2 & H3).
+    exists x, sig'. split; trivial.
 Admitted.
 
 Context { mas_state : MAS state_monad }.
