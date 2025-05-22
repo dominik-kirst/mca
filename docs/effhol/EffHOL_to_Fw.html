@@ -26,6 +26,13 @@
     <div id="content" tabindex="-1" onblur="document.getElementById('content').focus()">
     <div id="main">
 <div class="code">
+</div>
+
+<div class="doc">
+<a id="lab41"></a><h1 class="section">Instantiation into System F_w</h1>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Set Implicit Arguments</span>.<br/>
@@ -45,6 +52,13 @@
 <span class="id" title="keyword">Notation</span> <a id="lup" class="idref" href="#lup"><span class="id" title="abbreviation">lup</span></a> := <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Lists.List.html#nth_error"><span class="id" title="definition">nth_error</span></a>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab42"></a><h2 class="section">Specification of System F_w</h2>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Inductive</span> <a id="has_typeFw" class="idref" href="#has_typeFw"><span class="id" title="definition, inductive"><span id="has_typeFw_ind" class="id"><span id="has_typeFw_sind" class="id">has_typeFw</span></span></span></a> (<a id="Delta:1" class="idref" href="#Delta:1"><span class="id" title="binder">Delta</span></a> : <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="EffHOL.html#kind"><span class="id" title="definition">kind</span></a>) (<a id="Gamma:2" class="idref" href="#Gamma:2"><span class="id" title="binder">Gamma</span></a> : <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="syntax.html#Core.type"><span class="id" title="inductive">type</span></a>) : <a class="idref" href="syntax.html#Core.prog"><span class="id" title="inductive">prog</span></a> <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="syntax.html#Core.type"><span class="id" title="inductive">type</span></a> <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <span class="id" title="keyword">Prop</span> :=<br/>
@@ -131,6 +145,13 @@
 <span class="id" title="keyword">Section</span> <a id="Fw" class="idref" href="#Fw"><span class="id" title="section">Fw</span></a>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab43"></a><h2 class="section">Syntax components</h2>
+
+</div>
+<div class="code">
 
 <br/>
 &nbsp;&nbsp;<span class="id" title="keyword">Variable</span> <a id="Fw.icomp" class="idref" href="#Fw.icomp"><span class="id" title="variable">icomp</span></a> : <a class="idref" href="syntax.html#Core.type"><span class="id" title="inductive">type</span></a> <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="syntax.html#Core.type"><span class="id" title="inductive">type</span></a>.<br/>
@@ -139,6 +160,13 @@
 &nbsp;&nbsp;<span class="id" title="keyword">Variable</span> <a id="Fw.iafter" class="idref" href="#Fw.iafter"><span class="id" title="variable">iafter</span></a> : <a class="idref" href="syntax.html#Core.prog"><span class="id" title="inductive">prog</span></a> <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="syntax.html#Core.spec"><span class="id" title="inductive">spec</span></a> <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="syntax.html#Core.spec"><span class="id" title="inductive">spec</span></a>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab44"></a><h2 class="section">Assumptions about reduction and conversion</h2>
+
+</div>
+<div class="code">
 
 <br/>
 
@@ -163,6 +191,13 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="EffHOL.html#conv_spec"><span class="id" title="inductive">conv_spec</span></a> (<a class="idref" href="EffHOL_to_Fw.html#Fw.iafter"><span class="id" title="variable">iafter</span></a> <a class="idref" href="EffHOL_to_Fw.html#e:118"><span class="id" title="variable">e</span></a> <a class="idref" href="EffHOL_to_Fw.html#phi:119"><span class="id" title="variable">phi</span></a>) (<a class="idref" href="EffHOL_to_Fw.html#Fw.iafter"><span class="id" title="variable">iafter</span></a> <a class="idref" href="EffHOL_to_Fw.html#e:118"><span class="id" title="variable">e</span></a> <a class="idref" href="EffHOL_to_Fw.html#psi:120"><span class="id" title="variable">psi</span></a>).<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab45"></a><h2 class="section">Assumptions about substitution</h2>
+
+</div>
+<div class="code">
 
 <br/>
 &nbsp;&nbsp;<span class="id" title="keyword">Hypothesis</span> <a id="Fw.icomp_subst" class="idref" href="#Fw.icomp_subst"><span class="id" title="variable">icomp_subst</span></a> :<br/>
@@ -183,6 +218,13 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#6cd0f7b28b6092304087c7049437bb1a"><span class="id" title="notation">=</span></a> <a class="idref" href="EffHOL_to_Fw.html#Fw.iafter"><span class="id" title="variable">iafter</span></a> (<a class="idref" href="syntax.html#Core.subst_prog"><span class="id" title="definition">subst_prog</span></a> <a class="idref" href="EffHOL_to_Fw.html#xi1:138"><span class="id" title="variable">xi1</span></a> <a class="idref" href="EffHOL_to_Fw.html#xi2:139"><span class="id" title="variable">xi2</span></a> <a class="idref" href="EffHOL_to_Fw.html#e:141"><span class="id" title="variable">e</span></a>) (<a class="idref" href="syntax.html#Core.subst_spec"><span class="id" title="definition">subst_spec</span></a> (<a class="idref" href="syntax.html#Core.up_prog_type"><span class="id" title="lemma">up_prog_type</span></a> <a class="idref" href="EffHOL_to_Fw.html#xi1:138"><span class="id" title="variable">xi1</span></a>) (<a class="idref" href="syntax.html#Core.up_prog_prog"><span class="id" title="lemma">up_prog_prog</span></a> <a class="idref" href="EffHOL_to_Fw.html#xi2:139"><span class="id" title="variable">xi2</span></a>) (<a class="idref" href="syntax.html#Core.up_prog_exp"><span class="id" title="lemma">up_prog_exp</span></a> <a class="idref" href="EffHOL_to_Fw.html#xi3:140"><span class="id" title="variable">xi3</span></a>) <a class="idref" href="EffHOL_to_Fw.html#phi:142"><span class="id" title="variable">phi</span></a>).<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab46"></a><h2 class="section">Assumptions about typing judgements</h2>
+
+</div>
+<div class="code">
 
 <br/>
 &nbsp;&nbsp;<span class="id" title="keyword">Hypothesis</span> <a id="Fw.icomp_has_kind" class="idref" href="#Fw.icomp_has_kind"><span class="id" title="variable">icomp_has_kind</span></a> :<br/>
@@ -205,6 +247,13 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="EffHOL_to_Fw.html#is_specFw"><span class="id" title="inductive">is_specFw</span></a> <a class="idref" href="EffHOL_to_Fw.html#Delta:163"><span class="id" title="variable">Delta</span></a> <a class="idref" href="EffHOL_to_Fw.html#Gamma:164"><span class="id" title="variable">Gamma</span></a> <a class="idref" href="EffHOL_to_Fw.html#Sigma:165"><span class="id" title="variable">Sigma</span></a> (<a class="idref" href="EffHOL_to_Fw.html#Fw.iafter"><span class="id" title="variable">iafter</span></a> <a class="idref" href="EffHOL_to_Fw.html#e:166"><span class="id" title="variable">e</span></a> <a class="idref" href="EffHOL_to_Fw.html#phi:168"><span class="id" title="variable">phi</span></a>).<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab47"></a><h2 class="section">Assumptions about deductions</h2>
+
+</div>
+<div class="code">
 
 <br/>
 &nbsp;&nbsp;<span class="id" title="keyword">Hypothesis</span> <a id="Fw.iafter_ret" class="idref" href="#Fw.iafter_ret"><span class="id" title="variable">iafter_ret</span></a> :<br/>
@@ -223,6 +272,13 @@
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="EffHOL_to_Fw.html#Fw_prv"><span class="id" title="inductive">Fw_prv</span></a> <a class="idref" href="EffHOL_to_Fw.html#A:182"><span class="id" title="variable">A</span></a> (<a class="idref" href="EffHOL_to_Fw.html#Fw.iafter"><span class="id" title="variable">iafter</span></a> <a class="idref" href="EffHOL_to_Fw.html#e:185"><span class="id" title="variable">e</span></a> <a class="idref" href="EffHOL_to_Fw.html#psi:184"><span class="id" title="variable">psi</span></a>).<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab48"></a><h2 class="section">Translation of types and preservation lemma</h2>
+
+</div>
+<div class="code">
 
 <br/>
 &nbsp;&nbsp;<span class="id" title="keyword">Fixpoint</span> <a id="transFw_type" class="idref" href="#transFw_type"><span class="id" title="definition">transFw_type</span></a> (<a id="t:188" class="idref" href="#t:188"><span class="id" title="binder">t</span></a> : <a class="idref" href="syntax.html#Core.type"><span class="id" title="inductive">type</span></a>) : <a class="idref" href="syntax.html#Core.type"><span class="id" title="inductive">type</span></a> :=<br/>
@@ -243,6 +299,13 @@
 &nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab49"></a><h2 class="section">Translation of programs and preservation lemma</h2>
+
+</div>
+<div class="code">
 
 <br/>
 &nbsp;&nbsp;<span class="id" title="keyword">Fixpoint</span> <a id="transFw_prog" class="idref" href="#transFw_prog"><span class="id" title="definition">transFw_prog</span></a> (<a id="e:194" class="idref" href="#e:194"><span class="id" title="binder">e</span></a> : <a class="idref" href="syntax.html#Core.prog"><span class="id" title="inductive">prog</span></a>) : <a class="idref" href="syntax.html#Core.prog"><span class="id" title="inductive">prog</span></a> :=<br/>
@@ -328,6 +391,13 @@
 &nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab50"></a><h2 class="section">Translation of indices and preservation lemma</h2>
+
+</div>
+<div class="code">
 
 <br/>
 &nbsp;&nbsp;<span class="id" title="keyword">Fixpoint</span> <a id="transFw_index" class="idref" href="#transFw_index"><span class="id" title="definition">transFw_index</span></a> (<a id="o:211" class="idref" href="#o:211"><span class="id" title="binder">o</span></a> : <a class="idref" href="syntax.html#Core.index"><span class="id" title="inductive">index</span></a>) : <a class="idref" href="syntax.html#Core.index"><span class="id" title="inductive">index</span></a> :=<br/>
@@ -348,6 +418,13 @@
 &nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab51"></a><h2 class="section">Translation of specifications and expressions and preservation lemmas</h2>
+
+</div>
+<div class="code">
 
 <br/>
 &nbsp;&nbsp;<span class="id" title="keyword">Fixpoint</span> <a id="transFw_spec" class="idref" href="#transFw_spec"><span class="id" title="definition">transFw_spec</span></a> (<a id="phi:216" class="idref" href="#phi:216"><span class="id" title="binder">phi</span></a> : <a class="idref" href="syntax.html#Core.spec"><span class="id" title="inductive">spec</span></a>) : <a class="idref" href="syntax.html#Core.spec"><span class="id" title="inductive">spec</span></a> :=<br/>
@@ -430,6 +507,13 @@
 &nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab52"></a><h2 class="section">Soundness of translation of HOPL into F_w</h2>
+
+</div>
+<div class="code">
 
 <br/>
 &nbsp;&nbsp;<span class="id" title="keyword">Lemma</span> <a id="transFw_prog_ren" class="idref" href="#transFw_prog_ren"><span class="id" title="lemma">transFw_prog_ren</span></a> <a id="xi1:239" class="idref" href="#xi1:239"><span class="id" title="binder">xi1</span></a> <a id="xi2:240" class="idref" href="#xi2:240"><span class="id" title="binder">xi2</span></a> <a id="e:241" class="idref" href="#e:241"><span class="id" title="binder">e</span></a> :<br/>
@@ -640,6 +724,13 @@
 &nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab53"></a><h2 class="section">Combined translation of iHOL into F_w</h2>
+
+</div>
+<div class="code">
 
 <br/>
 &nbsp;&nbsp;<span class="id" title="keyword">Definition</span> <a id="trans_T'" class="idref" href="#trans_T'"><span class="id" title="definition">trans_T'</span></a> <a id="psi:276" class="idref" href="#psi:276"><span class="id" title="binder">psi</span></a> :=<br/>

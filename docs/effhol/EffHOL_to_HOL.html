@@ -26,6 +26,13 @@
     <div id="content" tabindex="-1" onblur="document.getElementById('content').focus()">
     <div id="main">
 <div class="code">
+</div>
+
+<div class="doc">
+<a id="lab37"></a><h1 class="section">Translation from EffHOL to HOL</h1>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Set Implicit Arguments</span>.<br/>
@@ -45,6 +52,13 @@
 <span class="id" title="keyword">Import</span> <a class="idref" href="unscoped.html#UnscopedNotations"><span class="id" title="module">UnscopedNotations</span></a>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab38"></a><h2 class="section">Translation functions</h2>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Fixpoint</span> <a id="trans_sort" class="idref" href="#trans_sort"><span class="id" title="definition">trans_sort</span></a> (<a id="o:1" class="idref" href="#o:1"><span class="id" title="binder">o</span></a> : <a class="idref" href="syntax.html#Core.index"><span class="id" title="inductive">index</span></a>) : <a class="idref" href="HOL.html#sort"><span class="id" title="definition">sort</span></a> :=<br/>
@@ -73,6 +87,13 @@
 <span class="id" title="keyword">end</span>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab39"></a><h2 class="section">Simple lemmas</h2>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Lemma</span> <a id="trans_sort_ren" class="idref" href="#trans_sort_ren"><span class="id" title="lemma">trans_sort_ren</span></a> <a id="o:10" class="idref" href="#o:10"><span class="id" title="binder">o</span></a> <a id="xi:11" class="idref" href="#xi:11"><span class="id" title="binder">xi</span></a> :<br/>
@@ -212,6 +233,13 @@
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab40"></a><h2 class="section">Main result</h2>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Lemma</span> <a id="HOPL_HOL" class="idref" href="#HOPL_HOL"><span class="id" title="lemma">HOPL_HOL</span></a> <a id="A:56" class="idref" href="#A:56"><span class="id" title="binder">A</span></a> <a id="phi:57" class="idref" href="#phi:57"><span class="id" title="binder">phi</span></a> :<br/>
@@ -252,6 +280,9 @@
 <span class="id" title="keyword">Proof</span>.<br/>
 &nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">H</span> % <a class="idref" href="EffHOL_to_HOL.html#HOPL_HOL"><span class="id" title="lemma">HOPL_HOL</span></a>. <span class="id" title="tactic">assumption</span>.<br/>
 <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">Print</span> <span class="id" title="keyword">Assumptions</span> <a class="idref" href="EffHOL_to_HOL.html#Consistency"><span class="id" title="lemma">Consistency</span></a>.<br/>
 </div>
 </div>
 <div id="footer">
