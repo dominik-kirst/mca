@@ -26,6 +26,8 @@
     <div id="content" tabindex="-1" onblur="document.getElementById('content').focus()">
     <div id="main">
 <div class="code">
+
+<br/>
 <span class="id" title="keyword">Set Implicit Arguments</span>.<br/>
 <span class="id" title="keyword">Unset</span> <span class="id" title="keyword">Strict</span> <span class="id" title="keyword">Implicit</span>.<br/>
 
@@ -48,12 +50,6 @@
 <span class="id" title="keyword">Notation</span> <a id="lup" class="idref" href="#lup"><span class="id" title="abbreviation">lup</span></a> := <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Lists.List.html#nth_error"><span class="id" title="definition">nth_error</span></a>.<br/>
 
 <br/>
-</div>
-
-<div class="doc">
-Typing judgements 
-</div>
-<div class="code">
 
 <br/>
 <span class="id" title="keyword">Definition</span> <a id="sort" class="idref" href="#sort"><span class="id" title="definition">sort</span></a> := <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>.<br/>
@@ -69,12 +65,6 @@ Typing judgements
 | <a id="ip_holds" class="idref" href="#ip_holds"><span class="id" title="constructor">ip_holds</span></a> <a id="p:14" class="idref" href="#p:14"><span class="id" title="binder">p</span></a> <a id="p':15" class="idref" href="#p':15"><span class="id" title="binder">p'</span></a> <a id="s:16" class="idref" href="#s:16"><span class="id" title="binder">s</span></a> : <a class="idref" href="HOL.html#has_sort:2"><span class="id" title="inductive">has_sort</span></a> <a class="idref" href="HOL.html#Xi:1"><span class="id" title="variable">Xi</span></a> <a class="idref" href="HOL.html#p:14"><span class="id" title="variable">p</span></a> (<a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Datatypes.html#S"><span class="id" title="constructor">S</span></a> <a class="idref" href="HOL.html#s:16"><span class="id" title="variable">s</span></a>) <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="HOL.html#has_sort:2"><span class="id" title="inductive">has_sort</span></a> <a class="idref" href="HOL.html#Xi:1"><span class="id" title="variable">Xi</span></a> <a class="idref" href="HOL.html#p':15"><span class="id" title="variable">p'</span></a> <a class="idref" href="HOL.html#s:16"><span class="id" title="variable">s</span></a> <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="HOL.html#is_prop:3"><span class="id" title="inductive">is_prop</span></a> <a class="idref" href="HOL.html#Xi:1"><span class="id" title="variable">Xi</span></a> (<a class="idref" href="syntax.html#Core.holds"><span class="id" title="constructor">holds</span></a> <a class="idref" href="HOL.html#p:14"><span class="id" title="variable">p</span></a> <a class="idref" href="HOL.html#p':15"><span class="id" title="variable">p'</span></a>).<br/>
 
 <br/>
-</div>
-
-<div class="doc">
-HOL deduction system 
-</div>
-<div class="code">
 
 <br/>
 <span class="id" title="keyword">Inductive</span> <a id="HOL_prv" class="idref" href="#HOL_prv"><span class="id" title="definition, inductive"><span id="HOL_prv_ind" class="id"><span id="HOL_prv_sind" class="id">HOL_prv</span></span></span></a> (<a id="A:17" class="idref" href="#A:17"><span class="id" title="binder">A</span></a> : <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="syntax.html#Core.form"><span class="id" title="inductive">form</span></a>) : <a class="idref" href="syntax.html#Core.form"><span class="id" title="inductive">form</span></a> <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <span class="id" title="keyword">Prop</span> :=<br/>
@@ -95,12 +85,6 @@ HOL deduction system
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
-</div>
-
-<div class="doc">
-Typed HOL deduction system 
-</div>
-<div class="code">
 
 <br/>
 <span class="id" title="keyword">Inductive</span> <a id="THOL_prv" class="idref" href="#THOL_prv"><span class="id" title="definition, inductive"><span id="THOL_prv_ind" class="id"><span id="THOL_prv_sind" class="id">THOL_prv</span></span></span></a> (<a id="Xi:39" class="idref" href="#Xi:39"><span class="id" title="binder">Xi</span></a> : <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="HOL.html#sort"><span class="id" title="definition">sort</span></a>) (<a id="A:40" class="idref" href="#A:40"><span class="id" title="binder">A</span></a> : <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Datatypes.html#list"><span class="id" title="inductive">list</span></a> <a class="idref" href="syntax.html#Core.form"><span class="id" title="inductive">form</span></a>) : <a class="idref" href="syntax.html#Core.form"><span class="id" title="inductive">form</span></a> <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <span class="id" title="keyword">Prop</span> :=<br/>

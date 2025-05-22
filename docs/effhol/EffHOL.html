@@ -26,6 +26,8 @@
     <div id="content" tabindex="-1" onblur="document.getElementById('content').focus()">
     <div id="main">
 <div class="code">
+
+<br/>
 <span class="id" title="keyword">Set Implicit Arguments</span>.<br/>
 <span class="id" title="keyword">Unset</span> <span class="id" title="keyword">Strict</span> <span class="id" title="keyword">Implicit</span>.<br/>
 
@@ -59,12 +61,6 @@
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
-</div>
-
-<div class="doc">
-Reduction and conversion 
-</div>
-<div class="code">
 
 <br/>
 <span class="id" title="keyword">Inductive</span> <a id="is_value" class="idref" href="#is_value"><span class="id" title="definition, inductive"><span id="is_value_ind" class="id"><span id="is_value_sind" class="id">is_value</span></span></span></a> : <a class="idref" href="syntax.html#Core.prog"><span class="id" title="inductive">prog</span></a> <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <span class="id" title="keyword">Prop</span> :=<br/>
@@ -141,12 +137,6 @@ Reduction and conversion
 | <a id="cs_holds_exp2" class="idref" href="#cs_holds_exp2"><span class="id" title="constructor">cs_holds_exp2</span></a> <a id="q1:157" class="idref" href="#q1:157"><span class="id" title="binder">q1</span></a> <a id="q2:158" class="idref" href="#q2:158"><span class="id" title="binder">q2</span></a> <a id="q2':159" class="idref" href="#q2':159"><span class="id" title="binder">q2'</span></a> <a id="e:160" class="idref" href="#e:160"><span class="id" title="binder">e</span></a> : <a class="idref" href="EffHOL.html#conv_exp:84"><span class="id" title="inductive">conv_exp</span></a> <a class="idref" href="EffHOL.html#q2:158"><span class="id" title="variable">q2</span></a> <a class="idref" href="EffHOL.html#q2':159"><span class="id" title="variable">q2'</span></a> <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="EffHOL.html#conv_spec:85"><span class="id" title="inductive">conv_spec</span></a> (<a class="idref" href="syntax.html#Core.spholds"><span class="id" title="constructor">spholds</span></a> <a class="idref" href="EffHOL.html#q1:157"><span class="id" title="variable">q1</span></a> <a class="idref" href="EffHOL.html#q2:158"><span class="id" title="variable">q2</span></a> <a class="idref" href="EffHOL.html#e:160"><span class="id" title="variable">e</span></a>) (<a class="idref" href="syntax.html#Core.spholds"><span class="id" title="constructor">spholds</span></a> <a class="idref" href="EffHOL.html#q1:157"><span class="id" title="variable">q1</span></a> <a class="idref" href="EffHOL.html#q2':159"><span class="id" title="variable">q2'</span></a> <a class="idref" href="EffHOL.html#e:160"><span class="id" title="variable">e</span></a>).<br/>
 
 <br/>
-</div>
-
-<div class="doc">
-Reduction and conversion renaming lemmas 
-</div>
-<div class="code">
 
 <br/>
 <span class="id" title="keyword">Lemma</span> <a id="is_value_ren" class="idref" href="#is_value_ren"><span class="id" title="lemma">is_value_ren</span></a> <a id="e:161" class="idref" href="#e:161"><span class="id" title="binder">e</span></a> <a id="sig1:162" class="idref" href="#sig1:162"><span class="id" title="binder">sig1</span></a> <a id="sig2:163" class="idref" href="#sig2:163"><span class="id" title="binder">sig2</span></a> :<br/>
@@ -253,12 +243,6 @@ Reduction and conversion renaming lemmas
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
-</div>
-
-<div class="doc">
-Reduction and conversion substitution lemmas 
-</div>
-<div class="code">
 
 <br/>
 <span class="id" title="keyword">Lemma</span> <a id="tred_type_subst" class="idref" href="#tred_type_subst"><span class="id" title="lemma">tred_type_subst</span></a> <a id="t1:191" class="idref" href="#t1:191"><span class="id" title="binder">t1</span></a> <a id="t2:192" class="idref" href="#t2:192"><span class="id" title="binder">t2</span></a> <a id="xi:193" class="idref" href="#xi:193"><span class="id" title="binder">xi</span></a> :<br/>
@@ -287,12 +271,6 @@ Reduction and conversion substitution lemmas
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
-</div>
-
-<div class="doc">
-Typing judgements 
-</div>
-<div class="code">
 
 <br/>
 <span class="id" title="keyword">Definition</span> <a id="kind" class="idref" href="#kind"><span class="id" title="definition">kind</span></a> := <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Datatypes.html#nat"><span class="id" title="inductive">nat</span></a>.<br/>
@@ -378,12 +356,6 @@ Typing judgements
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="EffHOL.html#is_spec:253"><span class="id" title="inductive">is_spec</span></a> <a class="idref" href="EffHOL.html#Delta:249"><span class="id" title="variable">Delta</span></a> <a class="idref" href="EffHOL.html#Gamma:250"><span class="id" title="variable">Gamma</span></a> <a class="idref" href="EffHOL.html#Sigma:251"><span class="id" title="variable">Sigma</span></a> (<a class="idref" href="syntax.html#Core.spholds"><span class="id" title="constructor">spholds</span></a> <a class="idref" href="EffHOL.html#q:284"><span class="id" title="variable">q</span></a> <a class="idref" href="EffHOL.html#q':285"><span class="id" title="variable">q'</span></a> <a class="idref" href="EffHOL.html#e:282"><span class="id" title="variable">e</span></a>).<br/>
 
 <br/>
-</div>
-
-<div class="doc">
-Judgement renaming lemmas 
-</div>
-<div class="code">
 
 <br/>
 <span class="id" title="keyword">Lemma</span> <a id="has_kind_ren" class="idref" href="#has_kind_ren"><span class="id" title="lemma">has_kind_ren</span></a> <a id="Delta:287" class="idref" href="#Delta:287"><span class="id" title="binder">Delta</span></a> <a id="Delta':288" class="idref" href="#Delta':288"><span class="id" title="binder">Delta'</span></a> <a id="t:289" class="idref" href="#t:289"><span class="id" title="binder">t</span></a> <a id="k:290" class="idref" href="#k:290"><span class="id" title="binder">k</span></a> <a id="xi:291" class="idref" href="#xi:291"><span class="id" title="binder">xi</span></a> :<br/>
@@ -527,12 +499,6 @@ Judgement renaming lemmas
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
-</div>
-
-<div class="doc">
-Judgement substitution lemmas 
-</div>
-<div class="code">
 
 <br/>
 <span class="id" title="keyword">Lemma</span> <a id="has_kind_subst" class="idref" href="#has_kind_subst"><span class="id" title="lemma">has_kind_subst</span></a> <a id="Delta:353" class="idref" href="#Delta:353"><span class="id" title="binder">Delta</span></a> <a id="Delta':354" class="idref" href="#Delta':354"><span class="id" title="binder">Delta'</span></a> <a id="t:355" class="idref" href="#t:355"><span class="id" title="binder">t</span></a> <a id="k:356" class="idref" href="#k:356"><span class="id" title="binder">k</span></a> <a id="sigma:357" class="idref" href="#sigma:357"><span class="id" title="binder">sigma</span></a> :<br/>
@@ -612,12 +578,6 @@ Judgement substitution lemmas
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
-</div>
-
-<div class="doc">
-Church-Rosser property 
-</div>
-<div class="code">
 
 <br/>
 <span class="id" title="keyword">Inductive</span> <a id="treds_type" class="idref" href="#treds_type"><span class="id" title="definition, inductive"><span id="treds_type_ind" class="id"><span id="treds_type_sind" class="id">treds_type</span></span></span></a> : <a class="idref" href="syntax.html#Core.type"><span class="id" title="inductive">type</span></a> <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="syntax.html#Core.type"><span class="id" title="inductive">type</span></a> <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <span class="id" title="keyword">Prop</span> :=<br/>
@@ -893,12 +853,6 @@ Church-Rosser property
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
-</div>
-
-<div class="doc">
-Subject reduction 
-</div>
-<div class="code">
 
 <br/>
 <span class="id" title="keyword">Lemma</span> <a id="conv_type_comp" class="idref" href="#conv_type_comp"><span class="id" title="lemma">conv_type_comp</span></a> <a id="t:488" class="idref" href="#t:488"><span class="id" title="binder">t</span></a> <a id="t':489" class="idref" href="#t':489"><span class="id" title="binder">t'</span></a> :<br/>
@@ -1106,12 +1060,6 @@ Subject reduction
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
-</div>
-
-<div class="doc">
-EffHOL deduction system 
-</div>
-<div class="code">
 
 <br/>
 <span class="id" title="keyword">Definition</span> <a id="swap" class="idref" href="#swap"><span class="id" title="definition">swap</span></a> := 0 <a class="idref" href="unscoped.html#CombineNotations.::subst_scope:x_'.:'_x"><span class="id" title="notation">.:</span></a> <a class="idref" href="unscoped.html#CombineNotations.::subst_scope:x_'.:'_x"><span class="id" title="notation">(</span></a><a class="idref" href="unscoped.html#99dca6227808551c977200f63e3476da"><span class="id" title="notation">↑</span></a> <a class="idref" href="unscoped.html#CombineNotations.::fscope:x_'&gt;&gt;'_x"><span class="id" title="notation">&gt;&gt;</span></a> <a class="idref" href="unscoped.html#99dca6227808551c977200f63e3476da"><span class="id" title="notation">↑</span></a><a class="idref" href="unscoped.html#CombineNotations.::subst_scope:x_'.:'_x"><span class="id" title="notation">)</span></a>.<br/>
