@@ -26,6 +26,15 @@
     <div id="content" tabindex="-1" onblur="document.getElementById('content').focus()">
     <div id="main">
 <div class="code">
+</div>
+
+<div class="doc">
+<a id="lab1"></a><h1 class="section">Monadic Combinatory Algebras</h1>
+
+</div>
+<div class="code">
+
+<br/>
 <span class="id" title="keyword">Set Implicit Arguments</span>.<br/>
 <span class="id" title="keyword">Unset</span> <span class="id" title="keyword">Strict</span> <span class="id" title="keyword">Implicit</span>.<br/>
 
@@ -34,6 +43,13 @@
 <span class="id" title="keyword">From</span> <span class="id" title="var">Equations.Prop</span> <span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <span class="id" title="library">Equations</span>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab2"></a><h2 class="section">Monads</h2>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Class</span> <a id="Monad" class="idref" href="#Monad"><span class="id" title="record">Monad</span></a> :=<br/>
@@ -51,6 +67,13 @@
 <span class="id" title="keyword">Coercion</span> <a class="idref" href="MCA.html#M"><span class="id" title="method">M</span></a> <a class="idref" href="MCA.html#M"><span class="id" title="method">:</span></a> <a class="idref" href="MCA.html#M"><span class="id" title="method">Monad</span></a> <a class="idref" href="MCA.html#M"><span class="id" title="method">&gt;-&gt;</span></a> <a class="idref" href="MCA.html#M"><span class="id" title="method">Funclass</span></a>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab3"></a><h2 class="section">MCAs</h2>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Class</span> <a id="MAS" class="idref" href="#MAS"><span class="id" title="record">MAS</span></a> (<a id="M:24" class="idref" href="#M:24"><span class="id" title="binder">M</span></a> : <a class="idref" href="MCA.html#Monad"><span class="id" title="class">Monad</span></a>) :=<br/>
@@ -93,6 +116,13 @@
 <span class="id" title="keyword">Arguments</span> <a class="idref" href="MCA.html#lam"><span class="id" title="method">lam</span></a> {<span class="id" title="var">_</span> <span class="id" title="var">_</span> <span class="id" title="var">_</span>} <span class="id" title="var">_</span> <span class="id" title="var">_</span>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab4"></a><h2 class="section">SK Definition</h2>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Section</span> <a id="SK" class="idref" href="#SK"><span class="id" title="section">SK</span></a>.<br/>
@@ -287,6 +317,13 @@
 <span class="id" title="keyword">End</span> <a class="idref" href="MCA.html#SK"><span class="id" title="section">SK</span></a>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab5"></a><h2 class="section">M-Modalities</h2>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Class</span> <a id="CHA" class="idref" href="#CHA"><span class="id" title="record">CHA</span></a> : <span class="id" title="keyword">Type</span> :=<br/>
@@ -449,6 +486,13 @@
 <span class="id" title="keyword">End</span> <a class="idref" href="MCA.html#MMod"><span class="id" title="section">MMod</span></a>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab6"></a><h2 class="section">Separators</h2>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Section</span> <a id="Sep" class="idref" href="#Sep"><span class="id" title="section">Sep</span></a>.<br/>
@@ -503,6 +547,13 @@
 <span class="id" title="keyword">Coercion</span> <a class="idref" href="MCA.html#subset"><span class="id" title="method">subset</span></a> <a class="idref" href="MCA.html#subset"><span class="id" title="method">:</span></a> <a class="idref" href="MCA.html#subset"><span class="id" title="method">separator</span></a> <a class="idref" href="MCA.html#subset"><span class="id" title="method">&gt;-&gt;</span></a> <a class="idref" href="MCA.html#subset"><span class="id" title="method">Funclass</span></a>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab7"></a><h2 class="section">Evidenced Frames</h2>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Class</span> <a id="EF" class="idref" href="#EF"><span class="id" title="record">EF</span></a> : <span class="id" title="keyword">Type</span> :=<br/>
@@ -538,6 +589,13 @@
 }.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab8"></a><h2 class="section">Induced Evidenced Frame</h2>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Notation</span> <a id="43505dac00c9e321d6460a6869a7c2c9" class="idref" href="#43505dac00c9e321d6460a6869a7c2c9"><span class="id" title="notation">&quot;</span></a>$0" :=<br/>
@@ -652,6 +710,17 @@
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab9"></a><h2 class="section">Examples</h2>
+
+<div class="paragraph"> </div>
+
+<a id="lab10"></a><h3 class="section">Axioms</h3>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Axiom</span> <a id="PE" class="idref" href="#PE"><span class="id" title="axiom">PE</span></a> : <span class="id" title="keyword">forall</span> (<a id="P:362" class="idref" href="#P:362"><span class="id" title="binder">P</span></a> <a id="P':363" class="idref" href="#P':363"><span class="id" title="binder">P'</span></a> : <span class="id" title="keyword">Prop</span>), <a class="idref" href="MCA.html#P:362"><span class="id" title="variable">P</span></a> <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#::type_scope:x_'&lt;-&gt;'_x"><span class="id" title="notation">&lt;-&gt;</span></a> <a class="idref" href="MCA.html#P':363"><span class="id" title="variable">P'</span></a> <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="MCA.html#P:362"><span class="id" title="variable">P</span></a> <a class="idref" href="http://coq.inria.fr/doc/V8.20.1/stdlib//Coq.Init.Logic.html#6cd0f7b28b6092304087c7049437bb1a"><span class="id" title="notation">=</span></a> <a class="idref" href="MCA.html#P':363"><span class="id" title="variable">P'</span></a>.<br/>
@@ -676,8 +745,13 @@
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
+</div>
 
-<br/>
+<div class="doc">
+<a id="lab11"></a><h3 class="section">Abstract termination predicates</h3>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Section</span> <a id="Examples" class="idref" href="#Examples"><span class="id" title="section">Examples</span></a>.<br/>
@@ -732,6 +806,13 @@
 <span class="id" title="keyword">Defined</span>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab12"></a><h3 class="section">PCA</h3>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Definition</span> <a id="subsingleton" class="idref" href="#subsingleton"><span class="id" title="definition">subsingleton</span></a> <a id="A:397" class="idref" href="#A:397"><span class="id" title="binder">A</span></a> :=<br/>
@@ -814,6 +895,13 @@
 <span class="id" title="keyword">Qed</span>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab13"></a><h3 class="section">RCA</h3>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Definition</span> <a id="powerset" class="idref" href="#powerset"><span class="id" title="definition">powerset</span></a> <a id="A:427" class="idref" href="#A:427"><span class="id" title="binder">A</span></a> :=<br/>
@@ -891,6 +979,13 @@
 &nbsp;&nbsp;<a class="idref" href="MCA.html#term_mod"><span class="id" title="definition">term_mod</span></a> <a class="idref" href="MCA.html#ter:447"><span class="id" title="variable">ter</span></a>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab14"></a><h3 class="section">SCA</h3>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Section</span> <a id="Examples.SCA" class="idref" href="#Examples.SCA"><span class="id" title="section">SCA</span></a>.<br/>
@@ -1004,6 +1099,13 @@
 <span class="id" title="keyword">End</span> <a class="idref" href="MCA.html#Examples.SCA"><span class="id" title="section">SCA</span></a>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab15"></a><h3 class="section">CPS</h3>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Section</span> <a id="Examples.CPS" class="idref" href="#Examples.CPS"><span class="id" title="section">CPS</span></a>.<br/>
@@ -1040,6 +1142,13 @@
 <span class="id" title="keyword">End</span> <a class="idref" href="MCA.html#Examples.CPS"><span class="id" title="section">CPS</span></a>.<br/>
 
 <br/>
+</div>
+
+<div class="doc">
+<a id="lab16"></a><h3 class="section">ParCA</h3>
+
+</div>
+<div class="code">
 
 <br/>
 <span class="id" title="keyword">Section</span> <a id="Examples.ParCA" class="idref" href="#Examples.ParCA"><span class="id" title="section">ParCA</span></a>.<br/>

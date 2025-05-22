@@ -1,3 +1,5 @@
+(** * Monadic Combinatory Algebras *)
+
 Set Implicit Arguments.
 Unset Strict Implicit.
 
@@ -6,7 +8,7 @@ From Equations.Prop Require Import Equations.
 
 
 
-(* Monads *)
+(** ** Monads *)
 
 Class Monad :=
 { 
@@ -23,7 +25,7 @@ Coercion M : Monad >-> Funclass.
 
 
 
-(* MCAs *)
+(** ** MCAs *)
 
 Class MAS (M : Monad) :=
 {
@@ -60,7 +62,7 @@ Arguments lam {_ _ _} _ _.
 
 
 
-(* SK Definition *)
+(** ** SK Definition *)
 
 Section SK.
 
@@ -235,7 +237,7 @@ End SK.
 
 
 
-(* M-Modalities *)
+(** ** M-Modalities *)
 
 Class CHA : Type :=
 {
@@ -379,7 +381,7 @@ End MMod.
 
 
 
-(* Separators *)
+(** ** Separators *)
 
 Section Sep.
 
@@ -424,7 +426,7 @@ Coercion subset : separator >-> Funclass.
 
 
 
-(* Evidenced Frames *)
+(** ** Evidenced Frames *)
 
 Class EF : Type :=
 {
@@ -460,7 +462,7 @@ Class EF : Type :=
 
 
 
-(* Induced EF *)
+(** ** Induced Evidenced Frame *)
 
 Notation "$0" :=
   (var F1).
@@ -567,7 +569,9 @@ Qed.
 
 
 
-(* Axioms *)
+(** ** Examples *)
+
+(** *** Axioms *)
 
 Axiom PE : forall (P P' : Prop), P <-> P' -> P = P'.
 
@@ -589,9 +593,7 @@ Qed.
 
 
 
-(* Examples *)
-
-(* Abstract termination predicates *)
+(** *** Abstract termination predicates *)
 
 Section Examples.
 
@@ -644,7 +646,7 @@ Defined.
 
 
 
-(* PCA *)
+(** *** PCA *)
 
 Definition subsingleton A :=
   { P : A -> Prop | forall x y, P x -> P y -> x = y }.
@@ -720,7 +722,7 @@ Qed.
 
 
 
-(* RCA *)
+(** *** RCA *)
 
 Definition powerset A :=
   A -> Prop.
@@ -790,7 +792,7 @@ Definition pow_dem_modality (ter : TER pow_dem_naive_modality) : MMod powerset_m
 
 
 
-(* SCA *)
+(** *** SCA *)
 
 Section SCA.
 
@@ -894,7 +896,7 @@ End SCA.
 
 
 
-(* CPS *)
+(** *** CPS *)
 
 Section CPS.
 
@@ -925,7 +927,7 @@ End CPS.
 
 
 
-(* ParCA *)
+(** *** ParCA *)
 
 Section ParCA.
 
