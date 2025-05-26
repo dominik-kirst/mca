@@ -1,0 +1,124 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<link href="coqdoc.css" rel="stylesheet" type="text/css" />
+<link href="coqdocjs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="config.js"></script>
+<script type="text/javascript" src="coqdocjs.js"></script>
+</head>
+
+<body onload="document.getElementById('content').focus()">
+  <div id="header">
+    <span class="left">
+      <span class="modulename"> <script> document.write(document.title) </script> </span>
+    </span>
+
+    <span class="button" id="toggle-proofs"></span>
+
+    <span class="right">
+      <a href="../">Project Page</a>
+      <a href="./indexpage.html"> Index </a>
+      <a href="./toc.html"> Table of Contents </a>
+    </span>
+</div>
+    <div id="content" tabindex="-1" onblur="document.getElementById('content').focus()">
+    <div id="main">
+<div class="code">
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#"><span class="id" title="library">Undecidability.FOL.ModelTheory.LogicalPrinciples</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Undecidability.FOL.ModelTheory.HenkinEnv.html#"><span class="id" title="library">Undecidability.FOL.ModelTheory.HenkinEnv</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Undecidability.FOL.ModelTheory.ReverseLS.html#"><span class="id" title="library">Undecidability.FOL.ModelTheory.ReverseLS</span></a>.<br/>
+<span class="id" title="keyword">Require</span> <span class="id" title="keyword">Import</span> <a class="idref" href="Undecidability.FOL.ModelTheory.Core.html#"><span class="id" title="library">Undecidability.FOL.ModelTheory.Core</span></a>.<br/>
+
+<br/>
+</div>
+
+<div class="doc">
+<a id="lab10"></a><h1 class="section">Full Decomposition of DLS</h1>
+
+</div>
+<div class="code">
+
+<br/>
+<span class="id" title="keyword">Section</span> <a id="LSiffDC" class="idref" href="#LSiffDC"><span class="id" title="section">LSiffDC</span></a>.<br/>
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Corollary</span> <a id="LS_iff_DC_under_CC_nat_LEM" class="idref" href="#LS_iff_DC_under_CC_nat_LEM"><span class="id" title="lemma">LS_iff_DC_under_CC_nat_LEM</span></a>: <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#CC_nat"><span class="id" title="definition">CC_nat</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#LEM"><span class="id" title="definition">LEM</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.Core.html#DLS"><span class="id" title="definition">DLS</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#::type_scope:x_'&lt;-&gt;'_x"><span class="id" title="notation">&lt;-&gt;</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#DC"><span class="id" title="definition">DC</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">H1</span> <span class="id" title="var">H2</span>; <span class="id" title="tactic">split</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" title="tactic">eapply</span> <a class="idref" href="Undecidability.FOL.ModelTheory.ReverseLS.html#LS_CC_impl_DC"><span class="id" title="lemma">LS_CC_impl_DC</span></a>; <span class="id" title="tactic">eauto</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> <span class="id" title="var">DC</span>. <span class="id" title="tactic">eapply</span> <a class="idref" href="Undecidability.FOL.ModelTheory.HenkinEnv.html#LS_downward_with_DC_LEM"><span class="id" title="lemma">LS_downward_with_DC_LEM</span></a>; <span class="id" title="tactic">eauto</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Corollary</span> <a id="LS_iff_DC_BDP_BEP_under_CC_nat" class="idref" href="#LS_iff_DC_BDP_BEP_under_CC_nat"><span class="id" title="lemma">LS_iff_DC_BDP_BEP_under_CC_nat</span></a>:<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#CC_nat"><span class="id" title="definition">CC_nat</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.Core.html#DLS"><span class="id" title="definition">DLS</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#::type_scope:x_'&lt;-&gt;'_x"><span class="id" title="notation">&lt;-&gt;</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#DC"><span class="id" title="definition">DC</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">/\</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BDP"><span class="id" title="definition">BDP</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">/\</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BEP"><span class="id" title="definition">BEP</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intros</span> <span class="id" title="var">H1</span>; <span class="id" title="tactic">split</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> <span class="id" title="var">HLS</span>. <span class="id" title="tactic">repeat</span> <span class="id" title="tactic">split</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">now</span> <span class="id" title="tactic">apply</span> <a class="idref" href="Undecidability.FOL.ModelTheory.ReverseLS.html#LS_CC_impl_DC"><span class="id" title="lemma">LS_CC_impl_DC</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">now</span> <span class="id" title="tactic">apply</span> <a class="idref" href="Undecidability.FOL.ModelTheory.ReverseLS.html#LS_impl_BDP"><span class="id" title="lemma">LS_impl_BDP</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">now</span> <span class="id" title="tactic">apply</span> <a class="idref" href="Undecidability.FOL.ModelTheory.ReverseLS.html#LS_impl_BEP"><span class="id" title="lemma">LS_impl_BEP</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> (<span class="id" title="var">h1</span> &amp; <span class="id" title="var">h2</span> &amp; <span class="id" title="var">h3</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">now</span> <span class="id" title="tactic">apply</span> <a class="idref" href="Undecidability.FOL.ModelTheory.HenkinEnv.html#LS_downward_with_BDP_BEP_DC"><span class="id" title="lemma">LS_downward_with_BDP_BEP_DC</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Corollary</span> <a id="LS_iff_DDC_BDP_BEP_BCC" class="idref" href="#LS_iff_DDC_BDP_BEP_BCC"><span class="id" title="lemma">LS_iff_DDC_BDP_BEP_BCC</span></a>:<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Undecidability.FOL.ModelTheory.Core.html#DLS"><span class="id" title="definition">DLS</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#::type_scope:x_'&lt;-&gt;'_x"><span class="id" title="notation">&lt;-&gt;</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#DDC"><span class="id" title="definition">DDC</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">/\</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BDP"><span class="id" title="definition">BDP</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">/\</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BEP"><span class="id" title="definition">BEP</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">/\</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BCC"><span class="id" title="definition">BCC</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">split</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> <span class="id" title="var">HLS</span>. <span class="id" title="tactic">repeat</span> <span class="id" title="tactic">split</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">assert</span> (<a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#OBDC"><span class="id" title="definition">OBDC</span></a>) <span class="id" title="keyword">as</span> <span class="id" title="var">HO</span>. <span class="id" title="var">now</span>  <span class="id" title="tactic">apply</span> <a class="idref" href="Undecidability.FOL.ModelTheory.ReverseLS.html#LS_impl_OBDC"><span class="id" title="lemma">LS_impl_OBDC</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">assert</span> (<a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BDC2"><span class="id" title="definition">BDC2</span></a>) <span class="id" title="keyword">as</span> <span class="id" title="var">H2</span>. <span class="id" title="tactic">intros</span> <span class="id" title="var">X</span> <span class="id" title="var">x</span>. <span class="id" title="var">now</span> <span class="id" title="tactic">apply</span> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#OBDC_impl_BDC2_on"><span class="id" title="lemma">OBDC_impl_BDC2_on</span></a>, <span class="id" title="var">HO</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">now</span> <span class="id" title="tactic">apply</span> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BDC2_iff_DDC_BCC"><span class="id" title="lemma">BDC2_iff_DDC_BCC</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">now</span> <span class="id" title="tactic">apply</span> <a class="idref" href="Undecidability.FOL.ModelTheory.ReverseLS.html#LS_impl_BDP"><span class="id" title="lemma">LS_impl_BDP</span></a>. <span class="id" title="var">now</span> <span class="id" title="tactic">apply</span> <a class="idref" href="Undecidability.FOL.ModelTheory.ReverseLS.html#LS_impl_BEP"><span class="id" title="lemma">LS_impl_BEP</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">now</span> <span class="id" title="tactic">eapply</span> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BDC_impl_BCC"><span class="id" title="lemma">BDC_impl_BCC</span></a>, <a class="idref" href="Undecidability.FOL.ModelTheory.ReverseLS.html#LS_impl_BDC"><span class="id" title="lemma">LS_impl_BDC</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;- <span class="id" title="tactic">intros</span> (<span class="id" title="var">h1</span> &amp; <span class="id" title="var">h2</span> &amp; <span class="id" title="var">h3</span> &amp; <span class="id" title="var">h4</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">now</span> <span class="id" title="tactic">apply</span>  <a class="idref" href="Undecidability.FOL.ModelTheory.HenkinEnv.html#LS_downward"><span class="id" title="lemma">LS_downward</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Theorem</span> <a id="Decomposition1" class="idref" href="#Decomposition1"><span class="id" title="lemma">Decomposition1</span></a>: <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Undecidability.FOL.ModelTheory.Core.html#DLS"><span class="id" title="definition">DLS</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#DDC"><span class="id" title="definition">DDC</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">/\</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BDP"><span class="id" title="definition">BDP</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">/\</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BEP"><span class="id" title="definition">BEP</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">/\</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BCC"><span class="id" title="definition">BCC</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>. <span class="id" title="var">now</span> <span class="id" title="tactic">rewrite</span> <a class="idref" href="Undecidability.FOL.ModelTheory.AnalysisLS.html#LS_iff_DDC_BDP_BEP_BCC"><span class="id" title="lemma">LS_iff_DDC_BDP_BEP_BCC</span></a>. <span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Theorem</span> <a id="Decomposition2" class="idref" href="#Decomposition2"><span class="id" title="lemma">Decomposition2</span></a>: <br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#DDC"><span class="id" title="definition">DDC</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">/\</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BDP"><span class="id" title="definition">BDP</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">/\</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BEP"><span class="id" title="definition">BEP</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">/\</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BCC"><span class="id" title="definition">BCC</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BDP"><span class="id" title="definition">BDP</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">/\</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BEP"><span class="id" title="definition">BEP</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">/\</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BDC2"><span class="id" title="definition">BDC2</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intros</span> (<span class="id" title="var">h1</span> &amp; <span class="id" title="var">h2</span> &amp; <span class="id" title="var">h3</span> &amp; <span class="id" title="var">h4</span>). <span class="id" title="tactic">repeat</span> <span class="id" title="tactic">split</span>; <span class="id" title="tactic">eauto</span>; <span class="id" title="var">now</span> <span class="id" title="tactic">apply</span> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#res_BDC2"><span class="id" title="lemma">res_BDC2</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Theorem</span> <a id="Decomposition3" class="idref" href="#Decomposition3"><span class="id" title="lemma">Decomposition3</span></a>:<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BDC2"><span class="id" title="definition">BDC2</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">/\</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BDP"><span class="id" title="definition">BDP</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#ba2b0e492d2b4675a0acf3ea92aabadd"><span class="id" title="notation">/\</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BEP"><span class="id" title="definition">BEP</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#::type_scope:x_'-&gt;'_x"><span class="id" title="notation">-&gt;</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#OBDC"><span class="id" title="definition">OBDC</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">intros</span> (<span class="id" title="var">h1</span> &amp; <span class="id" title="var">h2</span> &amp; <span class="id" title="var">h3</span>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">assert</span> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#DDC"><span class="id" title="definition">DDC</span></a> <span class="id" title="keyword">as</span> <span class="id" title="var">h4</span> <span class="id" title="tactic">by</span> (<span class="id" title="var">now</span> <span class="id" title="tactic">apply</span> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BDC2_impl_DDC"><span class="id" title="lemma">BDC2_impl_DDC</span></a>).<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">assert</span> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BCC"><span class="id" title="definition">BCC</span></a>. <span class="id" title="tactic">apply</span> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BDC_impl_BCC"><span class="id" title="lemma">BDC_impl_BCC</span></a>. <span class="id" title="var">now</span> <span class="id" title="tactic">apply</span> <a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#BDC2_impl_BDC"><span class="id" title="lemma">BDC2_impl_BDC</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">assert</span> <a class="idref" href="Undecidability.FOL.ModelTheory.Core.html#DLS"><span class="id" title="definition">DLS</span></a> <span class="id" title="tactic">by</span> <span class="id" title="var">now</span> <span class="id" title="tactic">rewrite</span> <a class="idref" href="Undecidability.FOL.ModelTheory.AnalysisLS.html#LS_iff_DDC_BDP_BEP_BCC"><span class="id" title="lemma">LS_iff_DDC_BDP_BEP_BCC</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="var">now</span> <span class="id" title="tactic">apply</span> <a class="idref" href="Undecidability.FOL.ModelTheory.ReverseLS.html#LS_impl_OBDC"><span class="id" title="lemma">LS_impl_OBDC</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Theorem</span> <a id="Decomposition4" class="idref" href="#Decomposition4"><span class="id" title="lemma">Decomposition4</span></a>:<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a class="idref" href="Undecidability.FOL.ModelTheory.LogicalPrinciples.html#OBDC"><span class="id" title="definition">OBDC</span></a> <a class="idref" href="http://coq.inria.fr/distrib/V8.15.0/stdlib//Coq.Init.Logic.html#::type_scope:x_'&lt;-&gt;'_x"><span class="id" title="notation">&lt;-&gt;</span></a> <a class="idref" href="Undecidability.FOL.ModelTheory.Core.html#DLS"><span class="id" title="definition">DLS</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Proof</span>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">split</span>; [<span class="id" title="tactic">intro</span> <span class="id" title="var">H</span>; <span class="id" title="var">now</span> <span class="id" title="tactic">apply</span> <a class="idref" href="Undecidability.FOL.ModelTheory.HenkinEnv.html#LS_downward'"><span class="id" title="lemma">LS_downward'</span></a>|].<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="tactic">apply</span> <a class="idref" href="Undecidability.FOL.ModelTheory.ReverseLS.html#LS_impl_OBDC"><span class="id" title="lemma">LS_impl_OBDC</span></a>.<br/>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="id" title="keyword">Qed</span>.<br/>
+
+<br/>
+<span class="id" title="keyword">End</span> <a class="idref" href="Undecidability.FOL.ModelTheory.AnalysisLS.html#LSiffDC"><span class="id" title="section">LSiffDC</span></a>.<br/>
+</div>
+</div>
+<div id="footer">
+  Generated by <a href="http://coq.inria.fr/">coqdoc</a> and improved with <a href="https://github.com/tebbi/coqdocjs">CoqdocJS</a>
+</div>
+</div>
+</body>
+
+</html>
